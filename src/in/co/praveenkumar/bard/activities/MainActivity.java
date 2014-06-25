@@ -51,6 +51,12 @@ public class MainActivity extends Activity {
 
 	}
 
+	@Override
+	protected void onDestroy() {
+		unregisterReceiver(mUsbReceiver);
+		super.onDestroy();
+	}
+
 	private void openAccessory(Intent i) {
 		Log.d(DEBUG_TAG, "Accessory attached");
 		UsbAccessory accessory = UsbManager.getAccessory(i);
@@ -72,6 +78,10 @@ public class MainActivity extends Activity {
 		mFin = new FileInputStream(fd);
 		mADKReader = new ADKReader(mFin);
 		mADKWriter = new ADKWriter(mFout);
+
+		// New thread to monitor incoming data
+		Thread readLogger = new Thread(mADKReader);
+		readLogger.start();
 	}
 
 	private void closeAccessory(Intent i) {
