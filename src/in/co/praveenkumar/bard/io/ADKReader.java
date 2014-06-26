@@ -24,13 +24,11 @@ public class ADKReader {
 
 	private class dataListener extends AsyncTask<Integer, Integer, Long> {
 		byte[] buffer = new byte[16384];
+		String read = "";
 
 		@Override
 		protected void onProgressUpdate(Integer... progress) {
-			String read = "";
-			for (int i = 0; i < progress[0]; i++) {
-				read += (int) buffer[i] + "\n";
-			}
+			System.out.println(read);
 			uu.setRead(read);
 		}
 
@@ -52,6 +50,7 @@ public class ADKReader {
 					int len = ret - i;
 					if (len >= 1) {
 						int value = (int) buffer[i];
+						read = read + buffer[i] + "\n";
 						Log.d(DEBUG_TAG, "Value is: " + value);
 					}
 					i += 1; // number of bytes sent
