@@ -1,16 +1,14 @@
 package in.co.praveenkumar.bard.activities;
 
+import in.co.praveenkumar.bard.R;
+import in.co.praveenkumar.bard.io.ADKReader;
+import in.co.praveenkumar.bard.io.ADKWriter;
+
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.android.future.usb.UsbAccessory;
-import com.android.future.usb.UsbManager;
-
-import in.co.praveenkumar.bard.R;
-import in.co.praveenkumar.bard.io.ADKReader;
-import in.co.praveenkumar.bard.io.ADKWriter;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -19,6 +17,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.android.future.usb.UsbAccessory;
+import com.android.future.usb.UsbManager;
 
 public class MainActivity extends Activity {
 	final String DEBUG_TAG = "BARD";
@@ -30,11 +34,21 @@ public class MainActivity extends Activity {
 	ADKReader mADKReader;
 	ADKWriter mADKWriter;
 	PendingIntent mPermissionIntent = null;
+	TextView accessoryStatus;
+	EditText sendData;
+	TextView receiveData;
+	Button sendButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		// Initialize widgets
+		accessoryStatus = (TextView) findViewById(R.id.main_accessory_status);
+		sendData = (EditText) findViewById(R.id.main_send_value);
+		receiveData = (TextView) findViewById(R.id.main_read_value);
+		sendButton = (Button) findViewById(R.id.main_send_button);
 
 		// Register receiver for actions
 		IntentFilter i = new IntentFilter();
@@ -78,6 +92,7 @@ public class MainActivity extends Activity {
 		mFin = new FileInputStream(fd);
 		mADKReader = new ADKReader(mFin);
 		mADKWriter = new ADKWriter(mFout);
+		widgetsAvailable(true);
 
 		// New thread to monitor incoming data
 		Thread readLogger = new Thread(mADKReader);
@@ -94,6 +109,7 @@ public class MainActivity extends Activity {
 					e.printStackTrace();
 				}
 			mAccessory = null;
+			widgetsAvailable(false);
 		}
 	}
 
@@ -117,6 +133,7 @@ public class MainActivity extends Activity {
 			}
 		} else {
 			Log.d(DEBUG_TAG, "No accessories");
+			widgetsAvailable(false);
 		}
 	}
 
@@ -167,5 +184,16 @@ public class MainActivity extends Activity {
 
 		}
 	};
+
+	private void widgetsAvailable(Boolean status) {
+		if (status) {
+			sendButton.setEnabled(true);
+			accessoryStatus.setText("attached!");
+		} else {
+			sendButton.setEnabled(false);
+			accessoryStatus.setText("detached!");
+		}
+
+	}
 
 }
