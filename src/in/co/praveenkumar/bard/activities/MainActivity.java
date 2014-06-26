@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
 		IntentFilter i = new IntentFilter();
 		i.addAction(UsbManager.ACTION_USB_ACCESSORY_ATTACHED);
 		i.addAction(UsbManager.ACTION_USB_ACCESSORY_DETACHED);
-		i.addAction("ch.serverbox.android.usbtest.USBPERMISSION");
+		i.addAction(USB_PERMISSION);
 		registerReceiver(mUsbReceiver, i);
 
 		if (getIntent().getAction().equals(
@@ -98,18 +98,25 @@ public class MainActivity extends Activity {
 	}
 
 	private void requestPermission() {
+		Log.d(DEBUG_TAG, "Requesting permission");
+
 		UsbAccessory[] accessories = UsbManager.getInstance(this)
 				.getAccessoryList();
-		for (UsbAccessory a : accessories) {
-			Log.d(DEBUG_TAG, "accessory: " + a.getManufacturer());
-			if (a.getManufacturer().equals(IDENT_MANUFACTURER)) {
-				mPermissionIntent = PendingIntent.getBroadcast(this, 0,
-						new Intent(USB_PERMISSION), 0);
-				UsbManager.getInstance(this).requestPermission(a,
-						mPermissionIntent);
-				Log.d(DEBUG_TAG, "permission requested");
-				break;
+
+		if (accessories != null) {
+			for (UsbAccessory a : accessories) {
+				Log.d(DEBUG_TAG, "accessory: " + a.getManufacturer());
+				if (a.getManufacturer().equals(IDENT_MANUFACTURER)) {
+					mPermissionIntent = PendingIntent.getBroadcast(this, 0,
+							new Intent(USB_PERMISSION), 0);
+					UsbManager.getInstance(this).requestPermission(a,
+							mPermissionIntent);
+					Log.d(DEBUG_TAG, "permission requested");
+					break;
+				}
 			}
+		} else {
+			Log.d(DEBUG_TAG, "No accessories");
 		}
 	}
 
