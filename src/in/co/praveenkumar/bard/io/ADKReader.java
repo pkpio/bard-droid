@@ -46,6 +46,7 @@ public class ADKReader {
 				}
 
 				i = 0;
+				read = "";
 				while (i < ret) {
 					int len = ret - i;
 					if (len >= 1) {
