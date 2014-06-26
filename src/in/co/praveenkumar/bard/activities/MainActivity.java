@@ -90,13 +90,12 @@ public class MainActivity extends Activity {
 		}
 		mFout = new FileOutputStream(fd);
 		mFin = new FileInputStream(fd);
-		mADKReader = new ADKReader(mFin);
+		mADKReader = new ADKReader(mFin, new UIUpdater());
 		mADKWriter = new ADKWriter(mFout);
 		widgetsAvailable(true);
 
-		// New thread to monitor incoming data
-		Thread readLogger = new Thread(mADKReader);
-		readLogger.start();
+		// Start to monitor incoming data
+		mADKReader.start();
 	}
 
 	private void closeAccessory(Intent i) {

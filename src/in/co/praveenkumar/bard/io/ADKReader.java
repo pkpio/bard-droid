@@ -1,42 +1,69 @@
 package in.co.praveenkumar.bard.io;
 
+import in.co.praveenkumar.bard.activities.MainActivity.UIUpdater;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
-public class ADKReader implements Runnable {
+public class ADKReader {
 	final String DEBUG_TAG = "BARD ADK Reader";
 	FileInputStream mFin = null;
+	UIUpdater uu = null;
 
-	public ADKReader(FileInputStream mFin) {
+	public ADKReader(FileInputStream mFin, UIUpdater uu) {
 		this.mFin = mFin;
+		this.uu = uu;
 	}
 
-	@Override
-	public void run() {
-		int ret = 0;
+	public void start() {
+		new dataListener().execute(0);
+	}
+
+	private class dataListener extends AsyncTask<Integer, Integer, Long> {
 		byte[] buffer = new byte[16384];
-		int i;
 
-		while (true) { // read data
-			Log.d(DEBUG_TAG, "Run is running");
-			try {
-				ret = mFin.read(buffer);
-			} catch (IOException e) {
-				break;
+		@Override
+		protected void onProgressUpdate(Integer... progress) {
+			String read = "";
+			for (int i = 0; i < progress[0]; i++) {
+				read += (int) buffer[i] + "\n";
 			}
+			uu.setRead(read);
+		}
 
-			i = 0;
-			while (i < ret) {
-				int len = ret - i;
-				if (len >= 1) {
-					int value = (int) buffer[i];
-					Log.d(DEBUG_TAG, "Value is: " + value);
+		@Override
+		protected Long doInBackground(Integer... params) {
+			int ret = 0;
+			int i;
+
+			while (true) { // read data
+				Log.d(DEBUG_TAG, "Run is running");
+				try {
+					ret = mFin.read(buffer);
+				} catch (IOException e) {
+					break;
 				}
-				i += 1; // number of bytes sent
-				Log.d(DEBUG_TAG, "Bytes received:" + i);
+
+				i = 0;
+				while (i < ret) {
+					int len = ret - i;
+					if (len >= 1) {
+						int value = (int) buffer[i];
+						Log.d(DEBUG_TAG, "Value is: " + value);
+					}
+					i += 1; // number of bytes sent
+					Log.d(DEBUG_TAG, "Bytes received:" + i);
+
+					if (i == ret) {
+						publishProgress(len);
+					}
+				}
 			}
+
+			return null;
 		}
 
 	}
