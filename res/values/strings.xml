@@ -4,4 +4,13 @@
     <string name="app_name">BARD</string>
     <string name="hello_world">Hello world!</string>
 
+    <!-- activity_main.xml -->
+    <string name="main_accessory_status_heading">Accessory status: </string>
+    <string name="main_accessory_status_message">Not attached</string>
+    <string name="main_send_heading">Send to PC</string>
+    <string name="main_send_value_hint">Enter a value</string>
+    <string name="main_send_button">Send</string>
+    <string name="main_read_heading">Read from PC:</string>
+    <string name="main_read_value">NA</string>
+
 </resources>
