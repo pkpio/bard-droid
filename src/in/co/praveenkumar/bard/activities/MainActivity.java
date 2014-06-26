@@ -196,4 +196,12 @@ public class MainActivity extends Activity {
 
 	}
 
+	public class UIUpdater {
+		public void setRead(String value) {
+			if (receiveData != null) {
+				receiveData.setText(value);
+			}
+		}
+	}
+
 }
