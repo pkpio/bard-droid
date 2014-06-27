@@ -21,6 +21,10 @@ public class ADKReader {
 	public void start() {
 		new dataListener().execute(0);
 	}
+	
+	public void setFinputstream(){
+		
+	}
 
 	private class dataListener extends AsyncTask<Integer, Integer, Long> {
 		byte[] buffer = new byte[16384];
@@ -28,7 +32,6 @@ public class ADKReader {
 
 		@Override
 		protected void onProgressUpdate(Integer... progress) {
-			System.out.println(read);
 			uu.setRead(read);
 		}
 
@@ -42,6 +45,7 @@ public class ADKReader {
 				try {
 					ret = mFin.read(buffer);
 				} catch (IOException e) {
+					e.printStackTrace();
 					break;
 				}
 
