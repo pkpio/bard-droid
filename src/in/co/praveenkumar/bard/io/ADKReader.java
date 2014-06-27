@@ -21,9 +21,9 @@ public class ADKReader {
 	public void start() {
 		new dataListener().execute(0);
 	}
-	
-	public void setFinputstream(){
-		
+
+	public void setFinputstream(FileInputStream mFin) {
+		this.mFin = mFin;
 	}
 
 	private class dataListener extends AsyncTask<Integer, Integer, Long> {
