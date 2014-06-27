@@ -70,6 +70,14 @@ public class ADKReader {
 			return null;
 		}
 
+		@Override
+		protected void onPostExecute(Long result) {
+			// We reached here means our read loop exited.
+			// Most common reason is BAD File Descriptor.
+			// So, open accessory again with updated FD.
+			uu.reInitAccessory();
+		}
+
 	}
 
 }
