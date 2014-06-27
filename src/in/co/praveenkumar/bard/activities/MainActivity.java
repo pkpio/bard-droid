@@ -84,8 +84,10 @@ public class MainActivity extends Activity {
 			fd = UsbManager.getInstance(this).openAccessory(accessory)
 					.getFileDescriptor();
 		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
 			finish();
 		} catch (NullPointerException e) {
+			e.printStackTrace();
 			finish();
 		}
 		mFout = new FileOutputStream(fd);
@@ -200,6 +202,10 @@ public class MainActivity extends Activity {
 			if (receiveData != null) {
 				receiveData.setText(value);
 			}
+		}
+		
+		public void reInitAccessory(){
+			initAccessory(mAccessory);
 		}
 	}
 
