@@ -92,7 +92,7 @@ public class MainActivity extends Activity {
 		}
 		mFout = new FileOutputStream(fd);
 		mFin = new FileInputStream(fd);
-		mADKReader = new ADKReader(mFin, new UIUpdater());
+		mADKReader = new ADKReader(mFin, new UIUpdater(), this, accessory);
 		mADKWriter = new ADKWriter(mFout);
 		widgetsAvailable(true);
 
@@ -203,8 +203,8 @@ public class MainActivity extends Activity {
 				receiveData.setText(value);
 			}
 		}
-		
-		public void reInitAccessory(){
+
+		public void reInitAccessory() {
 			initAccessory(mAccessory);
 		}
 	}
