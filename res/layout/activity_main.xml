@@ -67,26 +67,31 @@
 
     <!-- Read value from device -->
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:padding="8dp" >
+        android:layout_height="fill_parent" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="@string/main_read_heading"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/main_read_value"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:padding="5dp"
-            android:text="@string/main_read_value"
-            android:textSize="13sp" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="@string/main_read_heading"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/main_read_value"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:padding="5dp"
+                android:text="@string/main_read_value"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
