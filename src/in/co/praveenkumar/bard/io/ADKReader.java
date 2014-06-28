@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public class ADKReader {
-	final String DEBUG_TAG = "BARD ADK Reader";
+	final String DEBUG_TAG = "BARD.IO.ADKReader";
 	FileInputStream mFin = null;
 	UIUpdater uu = null;
 
@@ -40,11 +40,13 @@ public class ADKReader {
 			int ret = 0;
 			int i;
 
+			Log.d(DEBUG_TAG, "ADKReader doInbackground called");
+
 			while (true) { // read data
-				Log.d(DEBUG_TAG, "Run is running");
 				try {
 					ret = mFin.read(buffer);
 				} catch (IOException e) {
+					Log.d(DEBUG_TAG, "Caught a Reader exception");
 					e.printStackTrace();
 					break;
 				}
@@ -54,14 +56,13 @@ public class ADKReader {
 				while (i < ret) {
 					int len = ret - i;
 					if (len >= 1) {
-						int value = (int) buffer[i];
-						read = read + buffer[i] + "\n";
-						Log.d(DEBUG_TAG, "Value is: " + value);
+						//int value = (int) buffer[i];
+						read = read + buffer[i] + "\t";
 					}
 					i += 1; // number of bytes sent
-					Log.d(DEBUG_TAG, "Bytes received:" + i);
 
 					if (i == ret) {
+						Log.d(DEBUG_TAG, "Bytes received:" + i);
 						publishProgress(len);
 					}
 				}
@@ -75,6 +76,7 @@ public class ADKReader {
 			// We reached here means our read loop exited.
 			// Most common reason is BAD File Descriptor.
 			// So, open accessory again with updated FD.
+			Log.d(DEBUG_TAG, "ADKReader Post execute called");
 			uu.reInitAccessory();
 		}
 
