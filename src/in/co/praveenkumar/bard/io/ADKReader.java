@@ -11,7 +11,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.future.usb.UsbAccessory;
-import com.android.future.usb.UsbManager;
 
 public class ADKReader {
 	final String DEBUG_TAG = "BARD.IO.ADKReader";
@@ -70,22 +69,35 @@ public class ADKReader {
 							"Unknow exception while getting inputstream");
 					e.printStackTrace();
 				}
-				read = buffer.toString();
-				publishProgress(0);
+				// read = buffer.toString();
+				// publishProgress(0);
 
-				/*
-				 * i = 0; read = ""; while (i < ret) { int len = ret - i; if
-				 * (len >= 1) { // int value = (int) buffer[i]; read = read +
-				 * buffer[i] + "\t"; } i += 1; // number of bytes sent
-				 * 
-				 * if (i == ret) { Log.d(DEBUG_TAG, "Bytes received:" + i);
-				 * publishProgress(len); try { mFin.close(); } catch
-				 * (IOException e) { Log.d(DEBUG_TAG,
-				 * "Inputstream close failed"); e.printStackTrace(); } catch
-				 * (Exception e) { Log.d(DEBUG_TAG,
-				 * "Unknow exception while closing inputstream");
-				 * e.printStackTrace(); } } }
-				 */
+				i = 0;
+				read = "";
+				while (i < ret) {
+					int len = ret - i;
+					if (len >= 1) {
+						//int value = (int) buffer[i];
+						read = read + buffer[i] + "\t";
+					}
+					i += 1; // number of bytes sent
+
+					if (i == ret) {
+						Log.d(DEBUG_TAG, "Bytes received:" + i);
+						publishProgress(len);
+						// try {
+						// mFin.close();
+						// } catch (IOException e) {
+						// Log.d(DEBUG_TAG, "Inputstream close failed");
+						// e.printStackTrace();
+						// } catch (Exception e) {
+						// Log.d(DEBUG_TAG,
+						// "Unknow exception while closing inputstream");
+						// e.printStackTrace();
+						// }
+					}
+				}
+
 			}
 
 			return null;
@@ -97,7 +109,7 @@ public class ADKReader {
 			// Most common reason is BAD File Descriptor.
 			// So, open accessory again with updated FD.
 			Log.d(DEBUG_TAG, "ADKReader Post execute called");
-			uu.reInitAccessory();
+			//uu.reInitAccessory();
 		}
 
 	}
