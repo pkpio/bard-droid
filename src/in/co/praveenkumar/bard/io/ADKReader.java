@@ -78,7 +78,7 @@ public class ADKReader {
 					int len = ret - i;
 					if (len >= 1) {
 						//int value = (int) buffer[i];
-						read = read + buffer[i] + "\t";
+						read = read + (int) buffer[i] + "   ";
 					}
 					i += 1; // number of bytes sent
 
@@ -109,7 +109,7 @@ public class ADKReader {
 			// Most common reason is BAD File Descriptor.
 			// So, open accessory again with updated FD.
 			Log.d(DEBUG_TAG, "ADKReader Post execute called");
-			//uu.reInitAccessory();
+			uu.reInitAccessory();
 		}
 
 	}
