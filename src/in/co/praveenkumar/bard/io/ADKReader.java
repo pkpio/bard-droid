@@ -5,6 +5,8 @@ import in.co.praveenkumar.bard.activities.MainActivity.UIUpdater;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -69,35 +71,8 @@ public class ADKReader {
 							"Unknow exception while getting inputstream");
 					e.printStackTrace();
 				}
-				read = buffer.toString();
+				read = Arrays.toString(buffer);
 				publishProgress(0);
-
-				// i = 0;
-				// read = "";
-				// while (i < ret) {
-				// int len = ret - i;
-				// if (len >= 1) {
-				// //int value = (int) buffer[i];
-				// read = read + (int) buffer[i] + "   ";
-				// }
-				// i += 1; // number of bytes sent
-				//
-				// if (i == ret) {
-				// Log.d(DEBUG_TAG, "Bytes received:" + i);
-				// publishProgress(len);
-				// // try {
-				// // mFin.close();
-				// // } catch (IOException e) {
-				// // Log.d(DEBUG_TAG, "Inputstream close failed");
-				// // e.printStackTrace();
-				// // } catch (Exception e) {
-				// // Log.d(DEBUG_TAG,
-				// // "Unknow exception while closing inputstream");
-				// // e.printStackTrace();
-				// // }
-				// }
-				// }
-
 			}
 
 			return null;
