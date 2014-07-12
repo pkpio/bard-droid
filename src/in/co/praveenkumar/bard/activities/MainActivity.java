@@ -4,10 +4,13 @@ import in.co.praveenkumar.bard.R;
 import in.co.praveenkumar.bard.io.ADKReader;
 import in.co.praveenkumar.bard.io.ADKWriter;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -15,10 +18,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.future.usb.UsbAccessory;
@@ -38,6 +43,7 @@ public class MainActivity extends Activity {
 	EditText sendData;
 	TextView receiveData;
 	Button sendButton;
+	ImageView sampleImage;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,15 @@ public class MainActivity extends Activity {
 		sendData = (EditText) findViewById(R.id.main_send_value);
 		receiveData = (TextView) findViewById(R.id.main_read_value);
 		sendButton = (Button) findViewById(R.id.main_send_button);
+		sampleImage = (ImageView) findViewById(R.id.sample_image);
+
+		// Set image
+		try {
+			setupImage();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Register receiver for actions
 		IntentFilter i = new IntentFilter();
@@ -63,6 +78,33 @@ public class MainActivity extends Activity {
 		else
 			requestPermission();
 
+	}
+
+	public void setupImage() throws IOException {
+		Bitmap bitmap = Bitmap.createBitmap(1024, 768, Bitmap.Config.RGB_565);
+		ByteBuffer buffer = ByteBuffer.wrap(readFile(new File(
+				android.os.Environment.getExternalStorageDirectory(),
+				"bard.raw")));
+		bitmap.copyPixelsFromBuffer(buffer);
+		sampleImage.setImageBitmap(bitmap);
+	}
+
+	public static byte[] readFile(File file) throws IOException {
+		// Open file
+		RandomAccessFile f = new RandomAccessFile(file, "r");
+		try {
+			// Get and check length
+			long longlength = f.length();
+			int length = (int) longlength;
+			if (length != longlength)
+				throw new IOException("File size >= 2 GB");
+			// Read file and return data
+			byte[] data = new byte[length];
+			f.readFully(data);
+			return data;
+		} finally {
+			f.close();
+		}
 	}
 
 	@Override
