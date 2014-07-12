@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -59,7 +60,12 @@ public class MainActivity extends Activity {
 		sampleImage = (ImageView) findViewById(R.id.sample_image);
 
 		// Set image
-		setupImage();
+		try {
+			setupImage();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		// Register receiver for actions
 		IntentFilter i = new IntentFilter();
@@ -76,23 +82,22 @@ public class MainActivity extends Activity {
 
 	}
 
-	public void setupImage() {
+	public void setupImage() throws IOException {
 		System.out.println("setUpImage called");
 		Bitmap bitmap;
-		bitmap = BitmapFactory.decodeFile((new File(android.os.Environment
-				.getExternalStorageDirectory(), "bard.raw")).toString());
+		// bitmap = BitmapFactory.decodeFile((new File(android.os.Environment
+		// .getExternalStorageDirectory(), "bard.raw")).toString());
 		// bitmap = decodeImage(new File(
 		// android.os.Environment.getExternalStorageDirectory(),
 		// "bard.raw"));
 		System.out.println("reached 1");
-		// Bitmap bitmap = Bitmap.createBitmap(1024, 768,
-		// Bitmap.Config.RGB_565);
-		// ByteBuffer buffer = ByteBuffer.wrap(readFile(new File(
-		// android.os.Environment.getExternalStorageDirectory(),
-		// "bard.raw")));
-		// // buffer.flip();
-		// bitmap.copyPixelsFromBuffer(buffer);
-		// buffer.rewind();
+		bitmap = Bitmap.createBitmap(1024, 768, Bitmap.Config.RGB_565);
+		ByteBuffer buffer = ByteBuffer.wrap(readFile(new File(
+				android.os.Environment.getExternalStorageDirectory(),
+				"bard.raw")));
+		// buffer.flip();
+		bitmap.copyPixelsFromBuffer(buffer);
+		buffer.rewind();
 		if (bitmap == null)
 			System.out.println("Null bitmap");
 		sampleImage.setImageBitmap(bitmap);
