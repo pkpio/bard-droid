@@ -7,10 +7,10 @@ import in.co.praveenkumar.bard.io.ADKWriter;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -58,12 +59,7 @@ public class MainActivity extends Activity {
 		sampleImage = (ImageView) findViewById(R.id.sample_image);
 
 		// Set image
-		try {
-			setupImage();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		setupImage();
 
 		// Register receiver for actions
 		IntentFilter i = new IntentFilter();
@@ -80,13 +76,56 @@ public class MainActivity extends Activity {
 
 	}
 
-	public void setupImage() throws IOException {
-		Bitmap bitmap = Bitmap.createBitmap(1024, 768, Bitmap.Config.RGB_565);
-		ByteBuffer buffer = ByteBuffer.wrap(readFile(new File(
-				android.os.Environment.getExternalStorageDirectory(),
-				"bard.raw")));
-		bitmap.copyPixelsFromBuffer(buffer);
+	public void setupImage() {
+		System.out.println("setUpImage called");
+		Bitmap bitmap;
+		bitmap = BitmapFactory.decodeFile((new File(android.os.Environment
+				.getExternalStorageDirectory(), "bard.raw")).toString());
+		// bitmap = decodeImage(new File(
+		// android.os.Environment.getExternalStorageDirectory(),
+		// "bard.raw"));
+		System.out.println("reached 1");
+		// Bitmap bitmap = Bitmap.createBitmap(1024, 768,
+		// Bitmap.Config.RGB_565);
+		// ByteBuffer buffer = ByteBuffer.wrap(readFile(new File(
+		// android.os.Environment.getExternalStorageDirectory(),
+		// "bard.raw")));
+		// // buffer.flip();
+		// bitmap.copyPixelsFromBuffer(buffer);
+		// buffer.rewind();
+		if (bitmap == null)
+			System.out.println("Null bitmap");
 		sampleImage.setImageBitmap(bitmap);
+	}
+
+	private static Bitmap decodeImage(File f) {
+		try {
+			// Decode image size
+			BitmapFactory.Options o = new BitmapFactory.Options();
+			o.inJustDecodeBounds = true;
+			BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+
+			// The new size we want to scale to
+			final int REQUIRED_SIZE = 70;
+
+			System.out.println("reached 2");
+
+			// Find the correct scale value. It should be the power of 2.
+			int scale = 1;
+			while (o.outWidth / scale / 2 >= REQUIRED_SIZE
+					&& o.outHeight / scale / 2 >= REQUIRED_SIZE)
+				scale *= 2;
+
+			// Decode with inSampleSize
+			BitmapFactory.Options o2 = new BitmapFactory.Options();
+			o2.inSampleSize = scale;
+			return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found");
+		}
+
+		System.out.println("Returning null");
+		return null;
 	}
 
 	public static byte[] readFile(File file) throws IOException {
