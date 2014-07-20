@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -252,6 +251,10 @@ public class MainActivity extends Activity {
 
 		public void reInitAccessory() {
 			initAccessory(mAccessory);
+		}
+
+		public void updateFrame(byte[] imgBytes) {
+			setupImage(imgBytes);
 		}
 	}
 
