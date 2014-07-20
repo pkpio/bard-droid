@@ -64,7 +64,7 @@ public class ADKReader {
 				try {
 					try {
 						f = new FileOutputStream(file, true);
-						
+
 					} catch (FileNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -88,7 +88,7 @@ public class ADKReader {
 							"Unknow exception while getting inputstream");
 					e.printStackTrace();
 				}
-				read = Arrays.toString(buffer);
+				read = bytesToHex(buffer);// Arrays.toString(buffer);
 
 				publishProgress(0);
 			}
@@ -105,6 +105,18 @@ public class ADKReader {
 			uu.reInitAccessory();
 		}
 
+	}
+
+	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
+
+	public static String bytesToHex(byte[] bytes) {
+		char[] hexChars = new char[bytes.length * 2];
+		for (int j = 0; j < bytes.length; j++) {
+			int v = bytes[j] & 0xFF;
+			hexChars[j * 2] = hexArray[v >>> 4];
+			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+		}
+		return new String(hexChars);
 	}
 
 }
