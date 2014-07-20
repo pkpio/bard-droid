@@ -8,7 +8,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -50,11 +49,10 @@ public class ADKReader {
 
 		@Override
 		protected Long doInBackground(Integer... params) {
-			int ret = 0;
-			int i;
+			
 			File file = new File(
 					android.os.Environment.getExternalStorageDirectory(),
-					"bard.txt");
+					"bard.rawaaa");
 			FileOutputStream f = null;
 
 			Log.d(DEBUG_TAG, "ADKReader doInbackground called");
@@ -71,7 +69,7 @@ public class ADKReader {
 					}
 
 					Log.d(DEBUG_TAG, "Trying to buffer read");
-					ret = mFin.read(buffer);
+					mFin.read(buffer);
 					Log.d(DEBUG_TAG, "Buffer read");
 
 					if (f != null) {
@@ -88,9 +86,9 @@ public class ADKReader {
 							"Unknow exception while getting inputstream");
 					e.printStackTrace();
 				}
-				read = bytesToHex(buffer);// Arrays.toString(buffer);
+				//read = bytesToHex(buffer);// Arrays.toString(buffer);
 
-				publishProgress(0);
+				//publishProgress(0);
 			}
 
 			return null;
