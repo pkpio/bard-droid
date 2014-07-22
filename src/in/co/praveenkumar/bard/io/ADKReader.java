@@ -17,6 +17,11 @@ import com.android.future.usb.UsbAccessory;
 
 public class ADKReader {
 	final String DEBUG_TAG = "BARD.IO.ADKReader";
+	final int WIDTH = 1024;
+	final int HEIGHT = 768;
+	final int BPP = 2; // Bytes per pixel
+	final int FRAME_LENGTH = WIDTH * HEIGHT * BPP;
+
 	FileInputStream mFin = null;
 	UIUpdater uu = null;
 	Context context = null;
@@ -49,11 +54,10 @@ public class ADKReader {
 
 		@Override
 		protected Long doInBackground(Integer... params) {
-			
-			File file = new File(
-					android.os.Environment.getExternalStorageDirectory(),
-					"bard.rawaaa");
+
 			FileOutputStream f = null;
+			int length = 0;
+			int frame = 0;
 
 			Log.d(DEBUG_TAG, "ADKReader doInbackground called");
 
@@ -61,6 +65,15 @@ public class ADKReader {
 				byte[] buffer = new byte[16384];
 				try {
 					try {
+						if (length == FRAME_LENGTH) {
+							frame++;
+							length = 0;
+						}
+
+						File file = new File(
+								android.os.Environment
+										.getExternalStorageDirectory(),
+								"bard" + frame + ".raw");
 						f = new FileOutputStream(file, true);
 
 					} catch (FileNotFoundException e1) {
@@ -69,9 +82,8 @@ public class ADKReader {
 					}
 
 					Log.d(DEBUG_TAG, "Trying to buffer read");
-					mFin.read(buffer);
+					length += mFin.read(buffer);
 					Log.d(DEBUG_TAG, "Buffer read");
-
 					if (f != null) {
 						f.write(buffer);
 						f.flush();
@@ -86,9 +98,9 @@ public class ADKReader {
 							"Unknow exception while getting inputstream");
 					e.printStackTrace();
 				}
-				//read = bytesToHex(buffer);// Arrays.toString(buffer);
+				// read = bytesToHex(buffer);// Arrays.toString(buffer);
 
-				//publishProgress(0);
+				// publishProgress(0);
 			}
 
 			return null;
