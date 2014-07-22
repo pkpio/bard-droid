@@ -47,6 +47,10 @@ public class ADKReader {
 	private class dataListener extends AsyncTask<Integer, Integer, Long> {
 		String read = "";
 
+		int length = 0;
+		int frame = 0;
+		int callCount = 0;
+
 		@Override
 		protected void onProgressUpdate(Integer... progress) {
 			uu.setRead(read);
@@ -56,8 +60,6 @@ public class ADKReader {
 		protected Long doInBackground(Integer... params) {
 
 			FileOutputStream f = null;
-			int length = 0;
-			int frame = 0;
 
 			Log.d(DEBUG_TAG, "ADKReader doInbackground called");
 
@@ -68,6 +70,7 @@ public class ADKReader {
 						if (length == FRAME_LENGTH) {
 							frame++;
 							length = 0;
+							Log.d(DEBUG_TAG, "Frame is: " + frame);
 						}
 
 						File file = new File(
@@ -89,7 +92,9 @@ public class ADKReader {
 						f.flush();
 						f.close();
 					}
-					Log.d(DEBUG_TAG, "length is: " + length);
+					callCount++;
+					Log.d(DEBUG_TAG, "mCurrently at: " + length + " count:"
+							+ callCount);
 				} catch (IOException e) {
 					Log.d(DEBUG_TAG, "Caught a Reader exception");
 					e.printStackTrace();
@@ -98,6 +103,7 @@ public class ADKReader {
 					Log.d(DEBUG_TAG,
 							"Unknow exception while getting inputstream");
 					e.printStackTrace();
+					break;
 				}
 				// read = bytesToHex(buffer);// Arrays.toString(buffer);
 
