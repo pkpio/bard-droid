@@ -256,7 +256,7 @@ public class MainActivity extends Activity {
 		}
 
 		public void updateFrame() {
-			setupImage(Frame.current());
+			setupImage(Frame.frameBuffer);
 		}
 	}
 
