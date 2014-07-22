@@ -89,6 +89,7 @@ public class ADKReader {
 						f.flush();
 						f.close();
 					}
+					Log.d(DEBUG_TAG, "length is: " + length);
 				} catch (IOException e) {
 					Log.d(DEBUG_TAG, "Caught a Reader exception");
 					e.printStackTrace();
