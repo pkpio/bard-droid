@@ -1,6 +1,7 @@
 package in.co.praveenkumar.bard.activities;
 
 import in.co.praveenkumar.bard.R;
+import in.co.praveenkumar.bard.graphics.Frame;
 import in.co.praveenkumar.bard.io.ADKReader;
 import in.co.praveenkumar.bard.io.ADKWriter;
 
@@ -45,6 +46,7 @@ public class MainActivity extends Activity {
 	TextView receiveData;
 	Button sendButton;
 	ImageView sampleImage;
+	Frame fp = new Frame(); // Instantiate frame details
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +61,10 @@ public class MainActivity extends Activity {
 		sampleImage = (ImageView) findViewById(R.id.sample_image);
 
 		// Set image
-		setupImage(getImgBytes(new File(
+		ByteBuffer buffer = ByteBuffer.wrap(getImgBytes(new File(
 				android.os.Environment.getExternalStorageDirectory(),
 				"bard.raw")));
+		setupImage(buffer);
 
 		// Register receiver for actions
 		IntentFilter i = new IntentFilter();
@@ -78,11 +81,10 @@ public class MainActivity extends Activity {
 
 	}
 
-	public void setupImage(byte[] imgbytes) {
+	public void setupImage(ByteBuffer buffer) {
 		System.out.println("setUpImage called");
 		Bitmap bitmap;
 		bitmap = Bitmap.createBitmap(1024, 768, Bitmap.Config.RGB_565);
-		ByteBuffer buffer = ByteBuffer.wrap(imgbytes);
 		bitmap.copyPixelsFromBuffer(buffer);
 		buffer.rewind();
 		sampleImage.setImageBitmap(bitmap);
@@ -253,8 +255,8 @@ public class MainActivity extends Activity {
 			initAccessory(mAccessory);
 		}
 
-		public void updateFrame(byte[] imgBytes) {
-			setupImage(imgBytes);
+		public void updateFrame() {
+			setupImage(Frame.current());
 		}
 	}
 
