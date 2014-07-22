@@ -1,6 +1,7 @@
 package in.co.praveenkumar.bard.io;
 
 import in.co.praveenkumar.bard.activities.MainActivity.UIUpdater;
+import in.co.praveenkumar.bard.graphics.Frame;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -17,10 +18,6 @@ import com.android.future.usb.UsbAccessory;
 
 public class ADKReader {
 	final String DEBUG_TAG = "BARD.IO.ADKReader";
-	final int WIDTH = 1024;
-	final int HEIGHT = 768;
-	final int BPP = 2; // Bytes per pixel
-	final int FRAME_LENGTH = WIDTH * HEIGHT * BPP;
 
 	FileInputStream mFin = null;
 	UIUpdater uu = null;
@@ -45,7 +42,7 @@ public class ADKReader {
 	}
 
 	private class dataListener extends AsyncTask<Integer, Integer, Long> {
-		String read = "";
+		// String read = "";
 
 		int length = 0;
 		int frame = 0;
@@ -53,7 +50,7 @@ public class ADKReader {
 
 		@Override
 		protected void onProgressUpdate(Integer... progress) {
-			uu.setRead(read);
+			uu.updateFrame();
 		}
 
 		@Override
@@ -67,7 +64,7 @@ public class ADKReader {
 				byte[] buffer = new byte[4096];
 				try {
 					try {
-						if (length == FRAME_LENGTH) {
+						if (length == Frame.FRAME_LENGTH) {
 							frame++;
 							length = 0;
 							Log.d(DEBUG_TAG, "Frame is: " + frame);
@@ -92,6 +89,20 @@ public class ADKReader {
 						f.flush();
 						f.close();
 					}
+
+					// Write to frameBuffer
+					int pos = Frame.add(buffer);
+
+					// Draw the frame if end is reached
+					if (pos == 0 && callCount != 0)
+						publishProgress(0);
+
+					// Testing
+					System.out.println("Capacity: "
+							+ Frame.frameBuffer.position());
+					System.out.println("Position: "
+							+ Frame.frameBuffer.capacity());
+
 					callCount++;
 					Log.d(DEBUG_TAG, "mCurrently at: " + length + " count:"
 							+ callCount);
@@ -119,6 +130,7 @@ public class ADKReader {
 			// Most common reason is BAD File Descriptor.
 			// So, open accessory again with updated FD.
 			Log.d(DEBUG_TAG, "ADKReader Post execute called");
+			System.out.println(Frame.frameBuffer.capacity());
 			uu.reInitAccessory();
 		}
 
