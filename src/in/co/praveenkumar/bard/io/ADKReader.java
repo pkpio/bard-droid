@@ -61,19 +61,24 @@ public class ADKReader {
 			Log.d(DEBUG_TAG, "ADKReader doInbackground called");
 
 			while (true) { // read data
-				byte[] buffer = new byte[4096];
+				byte[] buffer = new byte[16384];
 				try {
 					try {
-						if (length == Frame.FRAME_LENGTH) {
+						// There is an initial off-set of 76 Bytes in 1st frame
+						// See how it can be fixed in udlfb
+						if (Frame.bytesReceived >= Frame.FRAME_LENGTH) {
 							frame++;
 							length = 0;
+							Frame.bytesReceived = 0;
+							Frame.frameCount++;
 							Log.d(DEBUG_TAG, "Frame is: " + frame);
+							publishProgress(0);
 						}
 
 						File file = new File(
 								android.os.Environment
 										.getExternalStorageDirectory(),
-								"bard" + frame + ".raw");
+								"bard" + Frame.frameCount + ".raw");
 						f = new FileOutputStream(file, true);
 
 					} catch (FileNotFoundException e1) {
@@ -82,30 +87,33 @@ public class ADKReader {
 					}
 
 					Log.d(DEBUG_TAG, "Trying to buffer read");
-					length += mFin.read(buffer);
+					Frame.bytesReceived += mFin.read(buffer);
 					Log.d(DEBUG_TAG, "Buffer read");
+
 					if (f != null) {
 						f.write(buffer);
 						f.flush();
 						f.close();
 					}
 
+					Log.d(DEBUG_TAG, "Bytes got: " + Frame.bytesReceived);
+
 					// Write to frameBuffer
-					int pos = Frame.add(buffer);
+					 int pos = Frame.add(buffer);
 
 					// Draw the frame if end is reached
-					if (pos == 0 && callCount != 0)
-						publishProgress(0);
+					// if (pos == 0 && callCount != 0)
+					// publishProgress(0);
 
 					// Testing
-					System.out.println("Capacity: "
-							+ Frame.frameBuffer.position());
-					System.out.println("Position: "
-							+ Frame.frameBuffer.capacity());
+					// System.out.println("Capacity: "
+					// + Frame.frameBuffer.position());
+					// System.out.println("Position: "
+					// + Frame.frameBuffer.capacity());
 
-					callCount++;
-					Log.d(DEBUG_TAG, "mCurrently at: " + length + " count:"
-							+ callCount);
+					// callCount++;
+					// Log.d(DEBUG_TAG, "mCurrently at: " + length + " count:"
+					// + callCount);
 				} catch (IOException e) {
 					Log.d(DEBUG_TAG, "Caught a Reader exception");
 					e.printStackTrace();
