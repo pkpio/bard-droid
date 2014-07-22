@@ -7,16 +7,19 @@ public class Frame {
 	static final int HEIGHT = 768;
 	static final int BPP = 2; // Bytes per pixel
 	public static final int FRAME_LENGTH = WIDTH * HEIGHT * BPP;
+	
+	//Temp variables
+	public static int bytesReceived = 0;
+	public static int frameCount = 0;
 
 	// Frame data will be hold in this
-	public static ByteBuffer frameBuffer = ByteBuffer
-			.allocateDirect(FRAME_LENGTH);
+	public static ByteBuffer frameBuffer = ByteBuffer.allocate(FRAME_LENGTH);
 
 	public static int add(byte[] page) {
 		frameBuffer.put(page);
 
 		// Reset position if end is reached
-		if (frameBuffer.position() >= FRAME_LENGTH - 1)
+		if (frameBuffer.position() >= FRAME_LENGTH)
 			frameBuffer.position(0);
 
 		return frameBuffer.position();
