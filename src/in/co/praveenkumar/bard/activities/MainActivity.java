@@ -18,13 +18,12 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -83,14 +82,14 @@ public class MainActivity extends Activity {
 	}
 
 	// Temporary listener
-	public void sndBtnClick() {
+	public void sndBtnClick(View v) {
 		setupImage(Frame.frameBuffer);
 	}
 
 	public void setupImage(ByteBuffer buffer) {
 		System.out.println("setUpImage called");
 		Bitmap bitmap;
-		bitmap = Bitmap.createBitmap(1024, 768, Bitmap.Config.RGB_565);
+		bitmap = Bitmap.createBitmap(1024, 668, Bitmap.Config.RGB_565);
 		bitmap.copyPixelsFromBuffer(buffer);
 		buffer.rewind();
 		sampleImage.setImageBitmap(bitmap);
