@@ -18,6 +18,8 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -78,7 +80,11 @@ public class MainActivity extends Activity {
 			openAccessory(getIntent());
 		else
 			requestPermission();
+	}
 
+	// Temporary listener
+	public void sndBtnClick() {
+		setupImage(Frame.frameBuffer);
 	}
 
 	public void setupImage(ByteBuffer buffer) {
