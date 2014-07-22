@@ -72,16 +72,16 @@ public class ADKReader {
 							Frame.bytesReceived = 0;
 							Frame.frameCount++;
 							Log.d(DEBUG_TAG, "Frame is: " + frame);
-							publishProgress(0);
+							//publishProgress(0);
 						}
 
-						File file = new File(
-								android.os.Environment
-										.getExternalStorageDirectory(),
-								"bard" + Frame.frameCount + ".raw");
-						f = new FileOutputStream(file, true);
+//						File file = new File(
+//								android.os.Environment
+//										.getExternalStorageDirectory(),
+//								"bard" + Frame.frameCount + ".raw");
+//						f = new FileOutputStream(file, true);
 
-					} catch (FileNotFoundException e1) {
+					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
@@ -90,11 +90,11 @@ public class ADKReader {
 					Frame.bytesReceived += mFin.read(buffer);
 					Log.d(DEBUG_TAG, "Buffer read");
 
-					if (f != null) {
-						f.write(buffer);
-						f.flush();
-						f.close();
-					}
+//					if (f != null) {
+//						f.write(buffer);
+//						f.flush();
+//						f.close();
+//					}
 
 					Log.d(DEBUG_TAG, "Bytes got: " + Frame.bytesReceived);
 
