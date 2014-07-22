@@ -50,6 +50,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/app_name" />
 
+        <!--
         <EditText
             android:id="@+id/main_send_value"
             android:layout_width="wrap_content"
@@ -59,6 +60,7 @@
             android:minWidth="250dp"
             android:padding="5dp"
             android:textSize="13sp" />
+        -->
 
         <Button
             android:id="@+id/main_send_button"
@@ -66,9 +68,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
+            android:onClick="sndBtnClick"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
-            android:onClick="sndBtnClick"
             android:text="@string/main_send_button" />
     </LinearLayout>
 

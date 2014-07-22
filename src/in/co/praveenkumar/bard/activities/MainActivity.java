@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
 
 		// Initialize widgets
 		accessoryStatus = (TextView) findViewById(R.id.main_accessory_status);
-		sendData = (EditText) findViewById(R.id.main_send_value);
+		// sendData = (EditText) findViewById(R.id.main_send_value);
 		receiveData = (TextView) findViewById(R.id.main_read_value);
 		sendButton = (Button) findViewById(R.id.main_send_button);
 		sampleImage = (ImageView) findViewById(R.id.sample_image);
