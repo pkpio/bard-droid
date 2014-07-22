@@ -62,7 +62,7 @@ public class ADKReader {
 			Log.d(DEBUG_TAG, "ADKReader doInbackground called");
 
 			while (true) { // read data
-				byte[] buffer = new byte[16384];
+				byte[] buffer = new byte[4096];
 				try {
 					try {
 						if (length == FRAME_LENGTH) {
