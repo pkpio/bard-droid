@@ -72,14 +72,8 @@ public class ADKReader {
 							Frame.bytesReceived = 0;
 							Frame.frameCount++;
 							Log.d(DEBUG_TAG, "Frame is: " + frame);
-							//publishProgress(0);
+							publishProgress(0);
 						}
-
-//						File file = new File(
-//								android.os.Environment
-//										.getExternalStorageDirectory(),
-//								"bard" + Frame.frameCount + ".raw");
-//						f = new FileOutputStream(file, true);
 
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
@@ -90,30 +84,11 @@ public class ADKReader {
 					Frame.bytesReceived += mFin.read(buffer);
 					Log.d(DEBUG_TAG, "Buffer read");
 
-//					if (f != null) {
-//						f.write(buffer);
-//						f.flush();
-//						f.close();
-//					}
-
 					Log.d(DEBUG_TAG, "Bytes got: " + Frame.bytesReceived);
 
 					// Write to frameBuffer
-					 int pos = Frame.add(buffer);
+					int pos = Frame.add(buffer);
 
-					// Draw the frame if end is reached
-					// if (pos == 0 && callCount != 0)
-					// publishProgress(0);
-
-					// Testing
-					// System.out.println("Capacity: "
-					// + Frame.frameBuffer.position());
-					// System.out.println("Position: "
-					// + Frame.frameBuffer.capacity());
-
-					// callCount++;
-					// Log.d(DEBUG_TAG, "mCurrently at: " + length + " count:"
-					// + callCount);
 				} catch (IOException e) {
 					Log.d(DEBUG_TAG, "Caught a Reader exception");
 					e.printStackTrace();
