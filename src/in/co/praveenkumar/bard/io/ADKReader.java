@@ -75,6 +75,13 @@ public class ADKReader {
 							publishProgress(0);
 						}
 
+						// Just a temporary thing
+						if (Frame.frameCount > 2) {
+							if (Frame.bytesReceived >= Frame.ALT_FRAME_LENGTH) {
+								publishProgress(0);
+							}
+						}
+
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
