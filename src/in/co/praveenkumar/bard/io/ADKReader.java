@@ -3,10 +3,8 @@ package in.co.praveenkumar.bard.io;
 import in.co.praveenkumar.bard.activities.MainActivity.UIUpdater;
 import in.co.praveenkumar.bard.graphics.Frame;
 
-import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
