@@ -2,6 +2,7 @@ package in.co.praveenkumar.bard.activities;
 
 import in.co.praveenkumar.bard.R;
 import in.co.praveenkumar.bard.graphics.Frame;
+import in.co.praveenkumar.bard.helpers.RleDecoder;
 import in.co.praveenkumar.bard.io.ADKReader;
 import in.co.praveenkumar.bard.io.ADKWriter;
 
@@ -79,6 +80,24 @@ public class MainActivity extends Activity {
 			openAccessory(getIntent());
 		else
 			requestPermission();
+
+		// Some temporary testing code
+		RleDecoder rled = new RleDecoder();
+		byte[] test = rled.decode(getImgBytes(new File(android.os.Environment
+				.getExternalStorageDirectory(), "bard.raw")));
+		try {
+			FileOutputStream fos = new FileOutputStream(new File(
+					android.os.Environment.getExternalStorageDirectory(),
+					"rle.raw"));
+			fos.write(test);
+			fos.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	// Temporary listener
