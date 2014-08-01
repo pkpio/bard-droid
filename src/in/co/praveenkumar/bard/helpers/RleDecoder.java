@@ -39,12 +39,14 @@ public class RleDecoder {
 			if (rleData[pos] == 'r' && rleData[pos + 1] == 'r') {
 				// Get the repetition count from next byte of special chars
 				pos = pos + 2;
-				count = rleData[pos];
+				count = rleData[pos]&0x000000ff;
 
 				// Get pixel data from next two bytes
 				pos++;
-				while (count != 0)
+				while (count != 0){
 					out.write(rleData, pos, 2);
+					count--;
+				}
 
 			}
 
