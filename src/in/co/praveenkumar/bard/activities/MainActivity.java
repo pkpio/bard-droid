@@ -84,11 +84,11 @@ public class MainActivity extends Activity {
 		// Some temporary testing code
 		RleDecoder rled = new RleDecoder();
 		byte[] test = rled.decode(getImgBytes(new File(android.os.Environment
-				.getExternalStorageDirectory(), "bard.raw")));
+				.getExternalStorageDirectory(), "rle.raw")));
 		try {
 			FileOutputStream fos = new FileOutputStream(new File(
 					android.os.Environment.getExternalStorageDirectory(),
-					"rle.raw"));
+					"rle-out.raw"));
 			fos.write(test);
 			fos.close();
 		} catch (FileNotFoundException e) {
