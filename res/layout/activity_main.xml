@@ -50,18 +50,6 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/app_name" />
 
-        <!--
-        <EditText
-            android:id="@+id/main_send_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:hint="@string/main_send_value_hint"
-            android:minWidth="250dp"
-            android:padding="5dp"
-            android:textSize="13sp" />
-        -->
-
         <Button
             android:id="@+id/main_send_button"
             android:layout_width="wrap_content"
