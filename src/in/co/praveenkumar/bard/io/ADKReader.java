@@ -59,7 +59,7 @@ public class ADKReader {
 			Log.d(DEBUG_TAG, "ADKReader doInbackground called");
 
 			while (true) { // read data
-				byte[] buffer = new byte[4096];
+				byte[] buffer = new byte[4098];
 				try {
 					try {
 						// There is an initial off-set of 76 Bytes in 1st frame
@@ -94,11 +94,17 @@ public class ADKReader {
 					// Writing to frameBuffer
 
 					// Get the index of the page
-					int pageIndex = (buffer[0] + buffer[1] << 8) & 0x00000ffff;
+					int pageIndex = (int) (buffer[0] & 0x0000000ff)
+							+ (int) (buffer[1] << 8 & 0x0000ff00);
+
+					System.out.println("buffer[0] is : "
+							+ (int) (buffer[0] & 0x0000000ff));
+					System.out.println("buffer[1] is : "
+							+ (int) (buffer[1] & 0x0000000ff));
 					System.out.println("Page index: " + pageIndex);
 
-					// Frame.frameBuffer.put(buffer, 2, buffer.length - 2);
-					int pos = Frame.add(buffer);
+					Frame.frameBuffer.put(buffer, 2, buffer.length - 2);
+					// int pos = Frame.add(buffer);
 
 				} catch (IOException e) {
 					Log.d(DEBUG_TAG, "Caught a Reader exception");
