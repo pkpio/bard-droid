@@ -8,7 +8,7 @@ public class Frame {
 	static final int BPP = 2; // Bytes per pixel
 	public static final int FRAME_LENGTH = WIDTH * HEIGHT * BPP;
 	
-	public static final int ALT_FRAME_LENGTH = WIDTH * 320 * BPP;
+	//public static final int ALT_FRAME_LENGTH = WIDTH * 320 * BPP;
 	
 	//Temp variables
 	public static int bytesReceived = 0;

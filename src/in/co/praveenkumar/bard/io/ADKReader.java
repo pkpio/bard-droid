@@ -75,7 +75,7 @@ public class ADKReader {
 
 						// Just a temporary thing
 						if (Frame.frameCount > 2) {
-							if (Frame.bytesReceived >= Frame.ALT_FRAME_LENGTH) {
+							if (Frame.bytesReceived >= Frame.FRAME_LENGTH) {
 								publishProgress(0);
 							}
 						}
@@ -97,7 +97,7 @@ public class ADKReader {
 					int pageIndex = (buffer[0] + buffer[1] << 8) & 0x00000ffff;
 					System.out.println("Page index: " + pageIndex);
 
-					//Frame.frameBuffer.put(buffer, 2, buffer.length - 2);
+					// Frame.frameBuffer.put(buffer, 2, buffer.length - 2);
 					int pos = Frame.add(buffer);
 
 				} catch (IOException e) {
