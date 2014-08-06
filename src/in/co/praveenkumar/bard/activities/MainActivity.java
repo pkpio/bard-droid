@@ -110,9 +110,19 @@ public class MainActivity extends Activity {
 		Bitmap bitmap;
 		buffer.position(0);
 		bitmap = Bitmap.createBitmap(1024, 768, Bitmap.Config.RGB_565);
-		bitmap.copyPixelsFromBuffer(buffer);
-		buffer.rewind();
-		sampleImage.setImageBitmap(bitmap);
+
+		/*
+		 * -TODO- Some strange thing here. Sometimes copyPixelsFromBuffer is
+		 * reading outside the buffer range
+		 */
+		try {
+			bitmap.copyPixelsFromBuffer(buffer);
+			buffer.rewind();
+			sampleImage.setImageBitmap(bitmap);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Exception with copyPixelsFromBuffer");
+		}
 	}
 
 	public static byte[] getImgBytes(File file) {
