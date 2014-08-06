@@ -91,7 +91,13 @@ public class ADKReader {
 
 					Log.d(DEBUG_TAG, "Bytes got: " + Frame.bytesReceived);
 
-					// Write to frameBuffer
+					// Writing to frameBuffer
+
+					// Get the index of the page
+					int pageIndex = (buffer[0] + buffer[1] << 8) & 0x00000ffff;
+					System.out.println("Page index: " + pageIndex);
+
+					//Frame.frameBuffer.put(buffer, 2, buffer.length - 2);
 					int pos = Frame.add(buffer);
 
 				} catch (IOException e) {
