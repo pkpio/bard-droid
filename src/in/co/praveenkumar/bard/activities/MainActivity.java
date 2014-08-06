@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
 	public void setupImage(ByteBuffer buffer) {
 		System.out.println("setUpImage called");
 		Bitmap bitmap;
-		bitmap = Bitmap.createBitmap(1024, 320, Bitmap.Config.RGB_565);
+		bitmap = Bitmap.createBitmap(1024, 768, Bitmap.Config.RGB_565);
 		bitmap.copyPixelsFromBuffer(buffer);
 		buffer.rewind();
 		sampleImage.setImageBitmap(bitmap);
