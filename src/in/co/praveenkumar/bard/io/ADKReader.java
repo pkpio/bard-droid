@@ -103,7 +103,11 @@ public class ADKReader {
 							+ (int) (buffer[1] & 0x0000000ff));
 					System.out.println("Page index: " + pageIndex);
 
-					Frame.frameBuffer.put(buffer, 2, buffer.length - 2);
+					int framePos = pageIndex * 4096;
+					if ((framePos - (buffer.length - 2)) <= Frame.FRAME_LENGTH){
+						Frame.frameBuffer.position(framePos);
+						Frame.frameBuffer.put(buffer, 2, buffer.length - 2);
+					}
 					// int pos = Frame.add(buffer);
 
 				} catch (IOException e) {
