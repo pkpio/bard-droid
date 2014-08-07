@@ -3,14 +3,12 @@ package in.co.praveenkumar.bard.graphics;
 import java.nio.ByteBuffer;
 
 public class Frame {
-	static final int WIDTH = 1024;
-	static final int HEIGHT = 768;
-	static final int BPP = 2; // Bytes per pixel
-	public static final int FRAME_LENGTH = WIDTH * HEIGHT * BPP;
-	
-	//public static final int ALT_FRAME_LENGTH = WIDTH * 320 * BPP;
-	
-	//Temp variables
+	public static final int FRAME_LENGTH = FrameSettings.WIDTH
+			* FrameSettings.HEIGHT * FrameSettings.BPP;
+
+	// public static final int ALT_FRAME_LENGTH = WIDTH * 320 * BPP;
+
+	// Temp variables
 	public static int bytesReceived = 0;
 	public static int frameCount = 0;
 
