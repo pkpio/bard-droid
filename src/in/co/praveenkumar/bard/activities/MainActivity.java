@@ -48,7 +48,7 @@ public class MainActivity extends Activity {
 
 		// Initialize widgets
 		accessoryStatus = (TextView) findViewById(R.id.main_accessory_status);
-		remoteScreen = (ImageView) findViewById(R.id.sample_image);
+		remoteScreen = (ImageView) findViewById(R.id.remote_screen);
 
 		// Register receiver for actions
 		IntentFilter i = new IntentFilter();

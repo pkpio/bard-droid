@@ -32,7 +32,7 @@
     <!-- Frame Display area -->
 
     <ImageView
-        android:id="@+id/sample_image"
+        android:id="@+id/remote_screen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_name" />
