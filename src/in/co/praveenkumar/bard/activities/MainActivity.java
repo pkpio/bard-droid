@@ -223,7 +223,7 @@ public class MainActivity extends Activity {
 
 		// Wait before doing next frame update
 		Handler myHandler = new Handler();
-		myHandler.postDelayed(frameUpdater, 500);
+		myHandler.postDelayed(frameUpdater, 50);
 	}
 
 	private Runnable frameUpdater = new Runnable() {
