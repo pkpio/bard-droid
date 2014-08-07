@@ -2,6 +2,7 @@ package in.co.praveenkumar.bard.activities;
 
 import in.co.praveenkumar.bard.R;
 import in.co.praveenkumar.bard.graphics.Frame;
+import in.co.praveenkumar.bard.graphics.FrameSettings;
 import in.co.praveenkumar.bard.helpers.RleDecoder;
 import in.co.praveenkumar.bard.io.ADKReader;
 import in.co.praveenkumar.bard.io.ADKWriter;
@@ -22,7 +23,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -37,10 +40,11 @@ public class MainActivity extends Activity {
 	final String DEBUG_TAG = "BARD";
 	final String IDENT_MANUFACTURER = "BeagleBone";
 	final String USB_PERMISSION = "in.co.praveenkumar.bard.activities.MainActivity.USBPERMISSION";
-	UsbAccessory mAccessory = null;
+	static UsbAccessory mAccessory = null;
+	static FileDescriptor fd = null;
 	FileOutputStream mFout = null;
-	FileInputStream mFin = null;
-	ADKReader mADKReader;
+	static FileInputStream mFin = null;
+	static ADKReader mADKReader;
 	ADKWriter mADKWriter;
 	PendingIntent mPermissionIntent = null;
 	TextView accessoryStatus;
@@ -98,6 +102,9 @@ public class MainActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		// Start Frame updater thread
+		new frameUpdateScheduler().execute();
 	}
 
 	// Temporary listener
@@ -161,7 +168,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void initAccessory(UsbAccessory accessory) {
-		FileDescriptor fd = null;
+		fd = null;
 		try {
 			fd = UsbManager.getInstance(this).openAccessory(accessory)
 					.getFileDescriptor();
@@ -172,10 +179,10 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 			finish();
 		}
-		mFout = new FileOutputStream(fd);
+		// mFout = new FileOutputStream(fd);
 		mFin = new FileInputStream(fd);
 		mADKReader = new ADKReader(mFin, new UIUpdater(), this, accessory);
-		mADKWriter = new ADKWriter(mFout);
+		// mADKWriter = new ADKWriter(mFout);
 		widgetsAvailable(true);
 
 		// Start to monitor incoming data
@@ -294,5 +301,37 @@ public class MainActivity extends Activity {
 			setupImage(Frame.frameBuffer);
 		}
 	}
+
+	private class frameUpdateScheduler extends AsyncTask<String, Integer, Long> {
+
+		protected Long doInBackground(String... url) {
+			Log.d(DEBUG_TAG, "FrameSchedular called");
+			return null;
+		}
+
+		protected void onPostExecute(Long result) {
+			setupImage(Frame.frameBuffer);
+
+			// Wait before doing next frame update
+			Handler myHandler = new Handler();
+			myHandler.postDelayed(frameUpdater, 500);
+		}
+	}
+
+	private void frameUpdate() {
+		setupImage(Frame.frameBuffer);
+
+		// Wait before doing next frame update
+		Handler myHandler = new Handler();
+		myHandler.postDelayed(frameUpdater, 500);
+	}
+
+	private Runnable frameUpdater = new Runnable() {
+		@Override
+		public void run() {
+			frameUpdate();
+			// new frameUpdateScheduler().execute();
+		}
+	};
 
 }
