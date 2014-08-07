@@ -5,7 +5,6 @@ import in.co.praveenkumar.bard.graphics.Frame;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import android.content.Context;
@@ -17,11 +16,11 @@ import com.android.future.usb.UsbAccessory;
 public class ADKReader {
 	final String DEBUG_TAG = "BARD.IO.ADKReader";
 
-	static FileInputStream mFin = null;
-	static UIUpdater uu = null;
-	static Context context = null;
-	static UsbAccessory mAccessory = null;
-	static FileDescriptor fd = null;
+	FileInputStream mFin = null;
+	UIUpdater uu = null;
+	Context context = null;
+	UsbAccessory mAccessory = null;
+	FileDescriptor fd = null;
 
 	public ADKReader(FileInputStream mFin, UIUpdater uu, Context context,
 			UsbAccessory mAccessory) {
@@ -40,11 +39,6 @@ public class ADKReader {
 	}
 
 	private class dataListener extends AsyncTask<Integer, Integer, Long> {
-		// String read = "";
-
-		int length = 0;
-		int frame = 0;
-		int callCount = 0;
 
 		@Override
 		protected void onProgressUpdate(Integer... progress) {
@@ -53,8 +47,6 @@ public class ADKReader {
 
 		@Override
 		protected Long doInBackground(Integer... params) {
-
-			FileOutputStream f = null;
 
 			Log.d(DEBUG_TAG, "ADKReader doInbackground called");
 

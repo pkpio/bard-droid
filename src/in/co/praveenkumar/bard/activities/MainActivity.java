@@ -69,10 +69,10 @@ public class MainActivity extends Activity {
 
 	// Temporary listener
 	public void sndBtnClick(View v) {
-		setupImage(Frame.frameBuffer);
+		updateImage(Frame.frameBuffer);
 	}
 
-	public void setupImage(ByteBuffer buffer) {
+	public void updateImage(ByteBuffer buffer) {
 		System.out.println("setUpImage called");
 		Bitmap bitmap;
 		buffer.position(0);
@@ -209,12 +209,12 @@ public class MainActivity extends Activity {
 		}
 
 		public void updateFrame() {
-			setupImage(Frame.frameBuffer);
+			updateImage(Frame.frameBuffer);
 		}
 	}
 
 	private void frameUpdate() {
-		setupImage(Frame.frameBuffer);
+		updateImage(Frame.frameBuffer);
 
 		// Wait before doing next frame update
 		Handler myHandler = new Handler();
