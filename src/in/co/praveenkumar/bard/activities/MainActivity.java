@@ -32,6 +32,7 @@ public class MainActivity extends Activity {
 
 	UsbAccessory mAccessory = null;
 	public static FileInputStream mFin = null;
+	public static FileDescriptor mFd = null;
 	ADKReader mADKReader;
 
 	PendingIntent mPermissionIntent = null;
@@ -223,7 +224,7 @@ public class MainActivity extends Activity {
 
 		// Wait before doing next frame update
 		Handler myHandler = new Handler();
-		myHandler.postDelayed(frameUpdater, 500);
+		myHandler.postDelayed(frameUpdater, 250);
 	}
 
 	private Runnable frameUpdater = new Runnable() {
@@ -238,6 +239,7 @@ public class MainActivity extends Activity {
 		try {
 			fd = UsbManager.getInstance(this).openAccessory(mAccessory)
 					.getFileDescriptor();
+			mFd = fd;
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			finish();
