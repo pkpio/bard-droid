@@ -17,11 +17,11 @@ import com.android.future.usb.UsbAccessory;
 public class ADKReader {
 	final String DEBUG_TAG = "BARD.IO.ADKReader";
 
-	FileInputStream mFin = null;
-	UIUpdater uu = null;
-	Context context = null;
-	UsbAccessory mAccessory = null;
-	FileDescriptor fd = null;
+	static FileInputStream mFin = null;
+	static UIUpdater uu = null;
+	static Context context = null;
+	static UsbAccessory mAccessory = null;
+	static FileDescriptor fd = null;
 
 	public ADKReader(FileInputStream mFin, UIUpdater uu, Context context,
 			UsbAccessory mAccessory) {
@@ -61,54 +61,24 @@ public class ADKReader {
 			while (true) { // read data
 				byte[] buffer = new byte[4098];
 				try {
-					try {
-						// There is an initial off-set of 76 Bytes in 1st frame
-						// See how it can be fixed in udlfb
-						if (Frame.bytesReceived >= Frame.FRAME_LENGTH) {
-							frame++;
-							length = 0;
-							Frame.bytesReceived = 0;
-							Frame.frameCount++;
-							Log.d(DEBUG_TAG, "Frame is: " + frame);
-							publishProgress(0);
-						}
-
-						// Just a temporary thing
-						if (Frame.frameCount > 2) {
-							if (Frame.bytesReceived >= Frame.FRAME_LENGTH) {
-								publishProgress(0);
-							}
-						}
-
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-
-					Log.d(DEBUG_TAG, "Trying to buffer read");
-					Frame.bytesReceived += mFin.read(buffer);
-					Log.d(DEBUG_TAG, "Buffer read");
-
-					Log.d(DEBUG_TAG, "Bytes got: " + Frame.bytesReceived);
-
-					// Writing to frameBuffer
+					if (mFin != null) {
+						System.out.println("mFin available: "
+								+ mFin.available());
+						Frame.bytesReceived += mFin.read(buffer);
+					} else
+						System.out.println("mFin in NULL");
 
 					// Get the index of the page
 					int pageIndex = (int) (buffer[0] & 0x0000000ff)
 							+ (int) (buffer[1] << 8 & 0x0000ff00);
 
-					System.out.println("buffer[0] is : "
-							+ (int) (buffer[0] & 0x0000000ff));
-					System.out.println("buffer[1] is : "
-							+ (int) (buffer[1] & 0x0000000ff));
 					System.out.println("Page index: " + pageIndex);
 
 					int framePos = pageIndex * 4096;
-					if ((framePos - (buffer.length - 2)) <= Frame.FRAME_LENGTH){
+					if ((framePos - (buffer.length - 2)) <= Frame.FRAME_LENGTH) {
 						Frame.frameBuffer.position(framePos);
 						Frame.frameBuffer.put(buffer, 2, buffer.length - 2);
 					}
-					// int pos = Frame.add(buffer);
 
 				} catch (IOException e) {
 					Log.d(DEBUG_TAG, "Caught a Reader exception");
@@ -120,6 +90,13 @@ public class ADKReader {
 					e.printStackTrace();
 					break;
 				}
+			}
+
+			try {
+				mFin.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
 			return null;
