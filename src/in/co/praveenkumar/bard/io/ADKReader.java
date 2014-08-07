@@ -62,8 +62,7 @@ public class ADKReader {
 				byte[] buffer = new byte[4098];
 				try {
 					if (mFin != null) {
-						System.out.println("mFin available: "
-								+ mFin.available());
+						System.out.println("mFin is not NULL");
 						Frame.bytesReceived += mFin.read(buffer);
 					} else
 						System.out.println("mFin in NULL");
