@@ -40,11 +40,10 @@ public class MainActivity extends Activity {
 	final String DEBUG_TAG = "BARD";
 	final String IDENT_MANUFACTURER = "BeagleBone";
 	final String USB_PERMISSION = "in.co.praveenkumar.bard.activities.MainActivity.USBPERMISSION";
-	static UsbAccessory mAccessory = null;
-	static FileDescriptor fd = null;
+	UsbAccessory mAccessory = null;
 	FileOutputStream mFout = null;
-	static FileInputStream mFin = null;
-	static ADKReader mADKReader;
+	FileInputStream mFin = null;
+	ADKReader mADKReader;
 	ADKWriter mADKWriter;
 	PendingIntent mPermissionIntent = null;
 	TextView accessoryStatus;
@@ -168,7 +167,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void initAccessory(UsbAccessory accessory) {
-		fd = null;
+		FileDescriptor fd = null;
 		try {
 			fd = UsbManager.getInstance(this).openAccessory(accessory)
 					.getFileDescriptor();
@@ -179,10 +178,10 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 			finish();
 		}
-		// mFout = new FileOutputStream(fd);
+		mFout = new FileOutputStream(fd);
 		mFin = new FileInputStream(fd);
 		mADKReader = new ADKReader(mFin, new UIUpdater(), this, accessory);
-		// mADKWriter = new ADKWriter(mFout);
+		mADKWriter = new ADKWriter(mFout);
 		widgetsAvailable(true);
 
 		// Start to monitor incoming data
@@ -314,13 +313,13 @@ public class MainActivity extends Activity {
 
 			// Wait before doing next frame update
 			Handler myHandler = new Handler();
-			myHandler.postDelayed(frameUpdater, 500);
+			myHandler.postDelayed(frameUpdater, 50);
 		}
 	}
 
 	private void frameUpdate() {
 		setupImage(Frame.frameBuffer);
-
+		
 		// Wait before doing next frame update
 		Handler myHandler = new Handler();
 		myHandler.postDelayed(frameUpdater, 500);
@@ -330,7 +329,7 @@ public class MainActivity extends Activity {
 		@Override
 		public void run() {
 			frameUpdate();
-			// new frameUpdateScheduler().execute();
+			//new frameUpdateScheduler().execute();
 		}
 	};
 
