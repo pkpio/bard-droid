@@ -1,9 +1,9 @@
 package in.co.praveenkumar.bard.io;
 
+import in.co.praveenkumar.bard.activities.MainActivity;
 import in.co.praveenkumar.bard.activities.MainActivity.UIUpdater;
 import in.co.praveenkumar.bard.graphics.Frame;
 
-import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -20,7 +20,6 @@ public class ADKReader {
 	UIUpdater uu = null;
 	Context context = null;
 	UsbAccessory mAccessory = null;
-	FileDescriptor fd = null;
 
 	public ADKReader(FileInputStream mFin, UIUpdater uu, Context context,
 			UsbAccessory mAccessory) {
@@ -74,23 +73,26 @@ public class ADKReader {
 				} catch (IOException e) {
 					Log.d(DEBUG_TAG, "Caught a Reader exception");
 					e.printStackTrace();
-					break;
+					uu.reInitAccessory();
+					mFin = MainActivity.mFin;
+					// break;
 				} catch (Exception e) {
 					Log.d(DEBUG_TAG,
 							"Unknow exception while getting inputstream");
 					e.printStackTrace();
-					break;
+					uu.reInitAccessory();
+					mFin = MainActivity.mFin;
+					// break;
 				}
 			}
 
-			try {
-				mFin.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			// try {
+			// mFin.close();
+			// } catch (IOException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
 
-			return null;
 		}
 
 		@Override
@@ -99,8 +101,7 @@ public class ADKReader {
 			// Most common reason is BAD File Descriptor.
 			// So, open accessory again with updated FD.
 			Log.d(DEBUG_TAG, "ADKReader Post execute called");
-			System.out.println(Frame.frameBuffer.capacity());
-			uu.reInitAccessory();
+			uu.restartReaderThread();
 		}
 
 	}

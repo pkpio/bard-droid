@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
 	final String USB_PERMISSION = "in.co.praveenkumar.bard.activities.MainActivity.USBPERMISSION";
 
 	UsbAccessory mAccessory = null;
-	FileInputStream mFin = null;
+	public static FileInputStream mFin = null;
 	ADKReader mADKReader;
 
 	PendingIntent mPermissionIntent = null;
@@ -205,12 +205,17 @@ public class MainActivity extends Activity {
 	public class UIUpdater {
 
 		public void reInitAccessory() {
+			resetInputStream();
+		}
+
+		public void restartReaderThread() {
 			initAccessory(mAccessory);
 		}
 
 		public void updateFrame() {
 			updateImage(Frame.frameBuffer);
 		}
+
 	}
 
 	private void frameUpdate() {
@@ -227,5 +232,20 @@ public class MainActivity extends Activity {
 			frameUpdate();
 		}
 	};
+
+	public void resetInputStream() {
+		FileDescriptor fd = null;
+		try {
+			fd = UsbManager.getInstance(this).openAccessory(mAccessory)
+					.getFileDescriptor();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			finish();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			finish();
+		}
+		mFin = new FileInputStream(fd);
+	}
 
 }
