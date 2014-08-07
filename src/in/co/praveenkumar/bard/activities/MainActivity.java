@@ -2,17 +2,10 @@ package in.co.praveenkumar.bard.activities;
 
 import in.co.praveenkumar.bard.R;
 import in.co.praveenkumar.bard.graphics.Frame;
-import in.co.praveenkumar.bard.helpers.RleDecoder;
 import in.co.praveenkumar.bard.io.ADKReader;
-import in.co.praveenkumar.bard.io.ADKWriter;
 
-import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 
 import android.app.Activity;
@@ -36,14 +29,16 @@ public class MainActivity extends Activity {
 	final String DEBUG_TAG = "BARD";
 	final String IDENT_MANUFACTURER = "BeagleBone";
 	final String USB_PERMISSION = "in.co.praveenkumar.bard.activities.MainActivity.USBPERMISSION";
+
 	UsbAccessory mAccessory = null;
-	FileOutputStream mFout = null;
 	FileInputStream mFin = null;
 	ADKReader mADKReader;
-	ADKWriter mADKWriter;
+
 	PendingIntent mPermissionIntent = null;
+
 	TextView accessoryStatus;
-	ImageView sampleImage;
+	ImageView remoteScreen;
+
 	Frame fp = new Frame(); // Instantiate frame details
 
 	@Override
@@ -53,13 +48,7 @@ public class MainActivity extends Activity {
 
 		// Initialize widgets
 		accessoryStatus = (TextView) findViewById(R.id.main_accessory_status);
-		sampleImage = (ImageView) findViewById(R.id.sample_image);
-
-		// Set image
-		ByteBuffer buffer = ByteBuffer.wrap(getImgBytes(new File(
-				android.os.Environment.getExternalStorageDirectory(),
-				"bard.raw")));
-		setupImage(buffer);
+		remoteScreen = (ImageView) findViewById(R.id.sample_image);
 
 		// Register receiver for actions
 		IntentFilter i = new IntentFilter();
@@ -73,24 +62,6 @@ public class MainActivity extends Activity {
 			openAccessory(getIntent());
 		else
 			requestPermission();
-
-		// Some temporary testing code
-		RleDecoder rled = new RleDecoder();
-		byte[] test = rled.decode(getImgBytes(new File(android.os.Environment
-				.getExternalStorageDirectory(), "rle.raw")));
-		try {
-			FileOutputStream fos = new FileOutputStream(new File(
-					android.os.Environment.getExternalStorageDirectory(),
-					"rle-out.raw"));
-			fos.write(test);
-			fos.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		// Start Frame updater thread
 		frameUpdate();
@@ -114,33 +85,11 @@ public class MainActivity extends Activity {
 		try {
 			bitmap.copyPixelsFromBuffer(buffer);
 			buffer.rewind();
-			sampleImage.setImageBitmap(bitmap);
+			remoteScreen.setImageBitmap(bitmap);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Exception with copyPixelsFromBuffer");
 		}
-	}
-
-	public static byte[] getImgBytes(File file) {
-		// Open file
-		RandomAccessFile f;
-		byte[] data = null;
-
-		try {
-			f = new RandomAccessFile(file, "r");
-			data = new byte[(int) f.length()];
-			f.readFully(data);
-			f.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		return data;
-
 	}
 
 	@Override
@@ -168,7 +117,6 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 			finish();
 		}
-		mFout = new FileOutputStream(fd);
 		mFin = new FileInputStream(fd);
 		mADKReader = new ADKReader(mFin, new UIUpdater(), this, accessory);
 
@@ -179,12 +127,6 @@ public class MainActivity extends Activity {
 	private void closeAccessory(Intent i) {
 		UsbAccessory accessory = UsbManager.getAccessory(i);
 		if (accessory != null && accessory.equals(mAccessory)) {
-			if (mFout != null)
-				try {
-					mFout.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 			mAccessory = null;
 		}
 	}
