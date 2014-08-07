@@ -29,66 +29,12 @@
             android:textSize="13sp" />
     </LinearLayout>
 
-    <!-- Send value to device -->
+    <!-- Frame Display area -->
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/sample_image"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="@string/main_send_heading"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/sample_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/app_name" />
-
-        <Button
-            android:id="@+id/main_send_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:onClick="sndBtnClick"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:text="@string/main_send_button" />
-    </LinearLayout>
-
-    <!-- Read value from device -->
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/main_read_heading"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/main_read_value"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:padding="5dp"
-                android:text="@string/main_read_value"
-                android:textSize="13sp" />
-        </LinearLayout>
-    </ScrollView>
+        android:contentDescription="@string/app_name" />
 
 </LinearLayout>

@@ -2,7 +2,6 @@ package in.co.praveenkumar.bard.activities;
 
 import in.co.praveenkumar.bard.R;
 import in.co.praveenkumar.bard.graphics.Frame;
-import in.co.praveenkumar.bard.graphics.FrameSettings;
 import in.co.praveenkumar.bard.helpers.RleDecoder;
 import in.co.praveenkumar.bard.io.ADKReader;
 import in.co.praveenkumar.bard.io.ADKWriter;
@@ -23,13 +22,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -47,9 +43,6 @@ public class MainActivity extends Activity {
 	ADKWriter mADKWriter;
 	PendingIntent mPermissionIntent = null;
 	TextView accessoryStatus;
-	EditText sendData;
-	TextView receiveData;
-	Button sendButton;
 	ImageView sampleImage;
 	Frame fp = new Frame(); // Instantiate frame details
 
@@ -60,9 +53,6 @@ public class MainActivity extends Activity {
 
 		// Initialize widgets
 		accessoryStatus = (TextView) findViewById(R.id.main_accessory_status);
-		// sendData = (EditText) findViewById(R.id.main_send_value);
-		receiveData = (TextView) findViewById(R.id.main_read_value);
-		sendButton = (Button) findViewById(R.id.main_send_button);
 		sampleImage = (ImageView) findViewById(R.id.sample_image);
 
 		// Set image
@@ -103,7 +93,7 @@ public class MainActivity extends Activity {
 		}
 
 		// Start Frame updater thread
-		new frameUpdateScheduler().execute();
+		frameUpdate();
 	}
 
 	// Temporary listener
@@ -181,8 +171,6 @@ public class MainActivity extends Activity {
 		mFout = new FileOutputStream(fd);
 		mFin = new FileInputStream(fd);
 		mADKReader = new ADKReader(mFin, new UIUpdater(), this, accessory);
-		mADKWriter = new ADKWriter(mFout);
-		widgetsAvailable(true);
 
 		// Start to monitor incoming data
 		mADKReader.start();
@@ -198,7 +186,6 @@ public class MainActivity extends Activity {
 					e.printStackTrace();
 				}
 			mAccessory = null;
-			widgetsAvailable(false);
 		}
 	}
 
@@ -222,7 +209,6 @@ public class MainActivity extends Activity {
 			}
 		} else {
 			Log.d(DEBUG_TAG, "No accessories");
-			widgetsAvailable(false);
 		}
 	}
 
@@ -274,23 +260,7 @@ public class MainActivity extends Activity {
 		}
 	};
 
-	private void widgetsAvailable(Boolean status) {
-		if (status) {
-			sendButton.setEnabled(true);
-			accessoryStatus.setText("attached!");
-		} else {
-			sendButton.setEnabled(false);
-			accessoryStatus.setText("detached!");
-		}
-
-	}
-
 	public class UIUpdater {
-		public void setRead(String value) {
-			if (receiveData != null) {
-				receiveData.setText(value);
-			}
-		}
 
 		public void reInitAccessory() {
 			initAccessory(mAccessory);
@@ -301,25 +271,9 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	private class frameUpdateScheduler extends AsyncTask<String, Integer, Long> {
-
-		protected Long doInBackground(String... url) {
-			Log.d(DEBUG_TAG, "FrameSchedular called");
-			return null;
-		}
-
-		protected void onPostExecute(Long result) {
-			setupImage(Frame.frameBuffer);
-
-			// Wait before doing next frame update
-			Handler myHandler = new Handler();
-			myHandler.postDelayed(frameUpdater, 50);
-		}
-	}
-
 	private void frameUpdate() {
 		setupImage(Frame.frameBuffer);
-		
+
 		// Wait before doing next frame update
 		Handler myHandler = new Handler();
 		myHandler.postDelayed(frameUpdater, 500);
@@ -329,7 +283,6 @@ public class MainActivity extends Activity {
 		@Override
 		public void run() {
 			frameUpdate();
-			//new frameUpdateScheduler().execute();
 		}
 	};
 
