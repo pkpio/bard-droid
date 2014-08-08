@@ -52,11 +52,7 @@ public class ADKReader {
 			while (true) { // read data
 				byte[] buffer = new byte[4098];
 				try {
-					if (mFin != null) {
-						System.out.println("mFin is not NULL");
-						Frame.bytesReceived += mFin.read(buffer);
-					} else
-						System.out.println("mFin in NULL");
+					Frame.bytesReceived += mFin.read(buffer);
 
 					// Get the index of the page
 					int pageIndex = (int) (buffer[0] & 0x0000000ff)
@@ -73,8 +69,8 @@ public class ADKReader {
 				} catch (IOException e) {
 					Log.d(DEBUG_TAG, "Caught a Reader exception");
 					e.printStackTrace();
-					 uu.reInitAccessory();
-					 mFin = MainActivity.mFin;
+					uu.reInitAccessory();
+					mFin = MainActivity.mFin;
 				} catch (Exception e) {
 					Log.d(DEBUG_TAG,
 							"Unknow exception while getting inputstream");
