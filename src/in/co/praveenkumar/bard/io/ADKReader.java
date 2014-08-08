@@ -73,27 +73,16 @@ public class ADKReader {
 				} catch (IOException e) {
 					Log.d(DEBUG_TAG, "Caught a Reader exception");
 					e.printStackTrace();
-//					mFin = new FileInputStream(MainActivity.mFd);
 					 uu.reInitAccessory();
 					 mFin = MainActivity.mFin;
-					// break;
 				} catch (Exception e) {
 					Log.d(DEBUG_TAG,
 							"Unknow exception while getting inputstream");
 					e.printStackTrace();
-//					mFin = new FileInputStream(MainActivity.mFd);
 					uu.reInitAccessory();
 					mFin = MainActivity.mFin;
-					// break;
 				}
 			}
-
-			// try {
-			// mFin.close();
-			// } catch (IOException e) {
-			// // TODO Auto-generated catch block
-			// e.printStackTrace();
-			// }
 
 		}
 
