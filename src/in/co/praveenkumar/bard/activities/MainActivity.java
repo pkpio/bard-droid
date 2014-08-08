@@ -31,6 +31,8 @@ public class MainActivity extends Activity {
 	final String IDENT_MANUFACTURER = "BeagleBone";
 	final String USB_PERMISSION = "in.co.praveenkumar.bard.activities.MainActivity.USBPERMISSION";
 
+	ImageView remoteScreen;
+
 	// Handler, Threads
 	private Handler UIHandler = new Handler();
 	private USBControlServer usbConnection;
@@ -40,8 +42,39 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		remoteScreen = (ImageView) findViewById(R.id.remote_screen);
 
 		setupUSB();
+
+		// Start Frame updater thread
+		frameUpdate();
+
+	}
+
+	public void updateImage() {
+		/*
+		 * A copy because we want the position to be set to 0 and the original
+		 * position in Frame could be at a different value
+		 */
+		// ByteBuffer buffer = Frame.frameBuffer;
+
+		System.out.println("setUpImage called");
+		Bitmap bitmap;
+		// buffer.position(0);
+		bitmap = Bitmap.createBitmap(1024, 768, Bitmap.Config.RGB_565);
+
+		/*
+		 * -TODO- Some strange thing here. Sometimes copyPixelsFromBuffer is
+		 * reading outside the buffer range
+		 */
+		try {
+			Frame.frameBuffer.position(0);
+			bitmap.copyPixelsFromBuffer(Frame.frameBuffer);
+			remoteScreen.setImageBitmap(bitmap);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Exception with copyPixelsFromBuffer");
+		}
 
 	}
 
@@ -65,7 +98,7 @@ public class MainActivity extends Activity {
 			System.out.println("Received onReceive");
 			int pageIndex = (int) (msg[0] & 0x0000000ff)
 					+ (int) (msg[1] << 8 & 0x0000ff00);
-			
+
 			// Update frame data
 			int framePos = pageIndex * 4096;
 			if ((framePos - (msg.length - 2)) <= Frame.FRAME_LENGTH) {
@@ -92,5 +125,20 @@ public class MainActivity extends Activity {
 		}
 
 	}
+
+	private void frameUpdate() {
+		updateImage();
+
+		// Wait before doing next frame update
+		Handler myHandler = new Handler();
+		myHandler.postDelayed(frameUpdater, 250);
+	}
+
+	private Runnable frameUpdater = new Runnable() {
+		@Override
+		public void run() {
+			frameUpdate();
+		}
+	};
 
 }
