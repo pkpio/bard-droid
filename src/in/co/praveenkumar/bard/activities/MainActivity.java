@@ -95,16 +95,18 @@ public class MainActivity extends Activity {
 		public void onReceive(byte[] msg) {
 
 			int i = 0;
-			System.out.println("Received onReceive");
-			int pageIndex = (int) (msg[0] & 0x0000000ff)
-					+ (int) (msg[1] << 8 & 0x0000ff00);
-
-			// Update frame data
-			int framePos = pageIndex * 4096;
-			if ((framePos - (msg.length - 2)) <= Frame.FRAME_LENGTH) {
-				Frame.frameBuffer.position(framePos);
-				Frame.frameBuffer.put(msg, 2, msg.length - 2);
-			}
+			// System.out.println("Received onReceive");
+			// int pageIndex = (int) (msg[0] & 0x0000000ff)
+			// + (int) (msg[1] << 8 & 0x0000ff00);
+			//
+			// System.out.println("Page index : " + pageIndex);
+			//
+			// // Update frame data
+			// int framePos = pageIndex * 4096;
+			// if ((framePos - (msg.length - 2)) <= Frame.FRAME_LENGTH) {
+			// Frame.frameBuffer.position(framePos);
+			// Frame.frameBuffer.put(msg, 2, msg.length - 2);
+			// }
 
 		}
 
