@@ -2,6 +2,7 @@ package in.co.praveenkumar.bard.activities;
 
 import in.co.praveenkumar.bard.R;
 import in.co.praveenkumar.bard.graphics.Frame;
+import in.co.praveenkumar.bard.graphics.FrameSettings;
 import in.co.praveenkumar.bard.io.USBControl;
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -96,7 +97,7 @@ public class MainActivity extends Activity {
 
 		// Wait before doing next frame update
 		Handler myHandler = new Handler();
-		myHandler.postDelayed(frameUpdater, 40);
+		myHandler.postDelayed(frameUpdater, 1000 / FrameSettings.FPS);
 	}
 
 	private Runnable frameUpdater = new Runnable() {
