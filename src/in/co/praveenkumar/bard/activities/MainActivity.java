@@ -2,29 +2,12 @@ package in.co.praveenkumar.bard.activities;
 
 import in.co.praveenkumar.bard.R;
 import in.co.praveenkumar.bard.graphics.Frame;
-import in.co.praveenkumar.bard.io.ADKReader;
 import in.co.praveenkumar.bard.io.USBControl;
-
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.nio.ByteBuffer;
-
 import android.app.Activity;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.android.future.usb.UsbAccessory;
-import com.android.future.usb.UsbManager;
 
 public class MainActivity extends Activity {
 	final String DEBUG_TAG = "BARD";
@@ -52,20 +35,14 @@ public class MainActivity extends Activity {
 	}
 
 	public void updateImage() {
-		/*
-		 * A copy because we want the position to be set to 0 and the original
-		 * position in Frame could be at a different value
-		 */
-		// ByteBuffer buffer = Frame.frameBuffer;
-
 		System.out.println("setUpImage called");
 		Bitmap bitmap;
-		// buffer.position(0);
 		bitmap = Bitmap.createBitmap(1024, 768, Bitmap.Config.RGB_565);
 
 		/*
-		 * -TODO- Some strange thing here. Sometimes copyPixelsFromBuffer is
-		 * reading outside the buffer range
+		 * -TODO- - Some strange thing here. Sometimes copyPixelsFromBuffer is
+		 * reading outside the buffer range - A possible race condition with
+		 * position being of Frame being set from reader thread.
 		 */
 		try {
 			Frame.frameBuffer.position(0);
@@ -93,20 +70,6 @@ public class MainActivity extends Activity {
 
 		@Override
 		public void onReceive(byte[] msg) {
-
-			int i = 0;
-			// System.out.println("Received onReceive");
-			// int pageIndex = (int) (msg[0] & 0x0000000ff)
-			// + (int) (msg[1] << 8 & 0x0000ff00);
-			//
-			// System.out.println("Page index : " + pageIndex);
-			//
-			// // Update frame data
-			// int framePos = pageIndex * 4096;
-			// if ((framePos - (msg.length - 2)) <= Frame.FRAME_LENGTH) {
-			// Frame.frameBuffer.position(framePos);
-			// Frame.frameBuffer.put(msg, 2, msg.length - 2);
-			// }
 
 		}
 
