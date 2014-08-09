@@ -29,7 +29,7 @@ public class BardReceiver extends BroadcastReceiver {
 				Log.d("USB", "permission denied for accessory " + accessory);
 			}
 		} else if (UsbManager.ACTION_USB_ACCESSORY_DETACHED.equals(action)) {
-			UsbAccessory accessory = UsbManager.getAccessory(intent);
+			//UsbAccessory accessory = UsbManager.getAccessory(intent);
 			Toast.makeText(context, "Detached", Toast.LENGTH_LONG).show();
 		}
 
