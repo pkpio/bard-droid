@@ -1,6 +1,8 @@
 package in.co.praveenkumar.bard.io;
 
 import in.co.praveenkumar.bard.graphics.Frame;
+import in.co.praveenkumar.bard.graphics.FrameSettings;
+import in.co.praveenkumar.bard.helpers.RleDecoder;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -133,17 +135,34 @@ public abstract class USBControl extends Thread {
 
 			public void run() {
 				while (running) {
-					byte[] msg = new byte[4098];
+					byte[] msg = new byte[4096];
 					try {
 						// Handle incoming messages
 						while (input != null && input.read(msg) != -1
 								&& running) {
-							//receive(msg);
+							// receive(msg);
 							System.out.println("Read USB data");
-							int pageIndex = (int) (msg[0] & 0x0000000ff)
+
+							/*
+							 * Read RLE encoded page length. This is generally
+							 * equal to the number of bytes read. We need to
+							 * handle decoding based on this value when there is
+							 * a mismatch from bytes received.
+							 */
+							int rled_length = (int) (msg[0] & 0x0000000ff)
 									+ (int) (msg[1] << 8 & 0x0000ff00);
 
+							System.out.println("rled_length : " + rled_length);
+
+							// Read pageIndex
+							int pageIndex = (int) (msg[2] & 0x0000000ff)
+									+ (int) (msg[3] << 8 & 0x0000ff00);
+
 							System.out.println("Page index : " + pageIndex);
+
+							// Decode RLE data
+							RleDecoder rled = new RleDecoder();
+							rled.decode(msg, 4, msg.length - 4);
 
 							// Update frame data
 							int framePos = pageIndex * 4096;
@@ -151,7 +170,7 @@ public abstract class USBControl extends Thread {
 								Frame.frameBuffer.position(framePos);
 								Frame.frameBuffer.put(msg, 2, msg.length - 2);
 							}
-							//Thread.sleep(10);
+
 						}
 					} catch (final Exception e) {
 						UIHandler.post(new Runnable() {
