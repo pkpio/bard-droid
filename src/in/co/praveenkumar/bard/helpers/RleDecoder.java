@@ -26,14 +26,18 @@ public class RleDecoder {
 	 * 
 	 * @param rleData
 	 *            RLE encoded in byte[].
+	 * @param offset
+	 * 			  Data offset in rleData from where RLE data starts
+	 * @param length
+	 * 			  Length of RLE data in rleData 
 	 * @return decode plain data in byte[]
 	 */
-	public byte[] decode(byte[] rleData) {
-		int pos = 0;
+	public byte[] decode(byte[] rleData, int offset, int length) {
+		int pos = offset;
 		int count = 0;
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		while (pos < rleData.length) {
+		while (pos < length) {
 
 			// Check for special chars for repeated data
 			if (rleData[pos] == 'r' && rleData[pos + 1] == 'r') {
