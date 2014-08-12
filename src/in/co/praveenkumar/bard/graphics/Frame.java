@@ -3,10 +3,11 @@ package in.co.praveenkumar.bard.graphics;
 import java.nio.ByteBuffer;
 
 public class Frame {
+	/**
+	 * The size in bytes of one frame of data
+	 */
 	public static final int FRAME_LENGTH = FrameSettings.WIDTH
 			* FrameSettings.HEIGHT * FrameSettings.BPP;
-
-	// public static final int ALT_FRAME_LENGTH = WIDTH * 320 * BPP;
 
 	// Temp variables
 	public static int bytesReceived = 0;
