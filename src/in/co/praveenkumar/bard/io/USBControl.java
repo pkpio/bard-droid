@@ -162,13 +162,15 @@ public abstract class USBControl extends Thread {
 
 							// Decode RLE data
 							RleDecoder rled = new RleDecoder();
-							rled.decode(msg, 4, msg.length - 4);
 
 							// Update frame data
 							int framePos = pageIndex * 4096;
 							if ((framePos - (msg.length - 2)) <= Frame.FRAME_LENGTH) {
 								Frame.frameBuffer.position(framePos);
-								Frame.frameBuffer.put(msg, 2, msg.length - 2);
+								Frame.frameBuffer.put(rled.decode(msg, 4,
+										msg.length - 4));
+								// Frame.frameBuffer.put(msg, 2, msg.length -
+								// 2);
 							}
 
 						}
