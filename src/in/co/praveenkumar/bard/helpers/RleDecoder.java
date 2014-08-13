@@ -50,6 +50,7 @@ public class RleDecoder {
 				pos++;
 				while (count != 0) {
 					count--;
+					out.write(rleData, pos, 2);
 					bytesRead = bytesRead + 2;
 				}
 
