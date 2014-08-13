@@ -145,8 +145,7 @@ public abstract class USBControl extends Thread {
 							// receive(msg);
 							System.out.println("Read USB data");
 
-							// Decoding on a different thread to prevent io
-							// blocking
+							// Decode on a new thread to prevent io blocking
 							decode(msg, bytesRead);
 
 						}
@@ -187,7 +186,7 @@ public abstract class USBControl extends Thread {
 	}
 
 	private void decode(final byte[] msg, final int bytesRead) {
-		new Thread(new Runnable() {
+		new Thread() {
 			public void run() {
 				/*
 				 * Read RLE encoded page length. This is generally equal to the
@@ -196,8 +195,6 @@ public abstract class USBControl extends Thread {
 				 */
 				int rled_length = (int) (msg[0] & 0x0000000ff)
 						+ (int) (msg[1] << 8 & 0x0000ff00);
-
-				System.out.println("rled_length : " + rled_length);
 
 				// Read pageIndex
 				int pageIndex = (int) (msg[2] & 0x0000000ff)
@@ -208,17 +205,16 @@ public abstract class USBControl extends Thread {
 				// Decode RLE data
 				RleDecoder rled = new RleDecoder();
 
+				byte[] test = rled.decode(msg, 4, bytesRead - 4);
 				// Update frame data
 				int framePos = pageIndex * 4096;
 				if ((framePos - (msg.length - 2)) <= Frame.FRAME_LENGTH) {
 					Frame.frameBuffer.position(framePos);
-					Frame.frameBuffer.put(rled.decode(msg, 4, bytesRead - 4));
-					// Frame.frameBuffer.put(msg, 2, msg.length -
-					// 2);
+					Frame.frameBuffer.put(test);
 				}
 
 			}
-		});
+		}.start();
 	}
 
 	// Sets up filestreams
