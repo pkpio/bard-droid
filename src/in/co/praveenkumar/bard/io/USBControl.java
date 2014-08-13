@@ -136,42 +136,18 @@ public abstract class USBControl extends Thread {
 			public void run() {
 				while (running) {
 					byte[] msg = new byte[4096];
+					int bytesRead = 0;
 					try {
 						// Handle incoming messages
-						while (input != null && input.read(msg) != -1
+						while (input != null
+								&& (bytesRead = input.read(msg)) != -1
 								&& running) {
 							// receive(msg);
 							System.out.println("Read USB data");
 
-							/*
-							 * Read RLE encoded page length. This is generally
-							 * equal to the number of bytes read. We need to
-							 * handle decoding based on this value when there is
-							 * a mismatch from bytes received.
-							 */
-							int rled_length = (int) (msg[0] & 0x0000000ff)
-									+ (int) (msg[1] << 8 & 0x0000ff00);
-
-							System.out.println("rled_length : " + rled_length);
-
-							// Read pageIndex
-							int pageIndex = (int) (msg[2] & 0x0000000ff)
-									+ (int) (msg[3] << 8 & 0x0000ff00);
-
-							System.out.println("Page index : " + pageIndex);
-
-							// Decode RLE data
-							RleDecoder rled = new RleDecoder();
-
-							// Update frame data
-							int framePos = pageIndex * 4096;
-							if ((framePos - (msg.length - 2)) <= Frame.FRAME_LENGTH) {
-								Frame.frameBuffer.position(framePos);
-								Frame.frameBuffer.put(rled.decode(msg, 4,
-										msg.length - 4));
-								// Frame.frameBuffer.put(msg, 2, msg.length -
-								// 2);
-							}
+							// Decoding on a different thread to prevent io
+							// blocking
+							decode(msg, bytesRead);
 
 						}
 					} catch (final Exception e) {
@@ -208,6 +184,41 @@ public abstract class USBControl extends Thread {
 			}
 		};
 		Looper.loop();
+	}
+
+	private void decode(final byte[] msg, final int bytesRead) {
+		new Thread(new Runnable() {
+			public void run() {
+				/*
+				 * Read RLE encoded page length. This is generally equal to the
+				 * number of bytes read. We need to handle decoding based on
+				 * this value when there is a mismatch from bytes received.
+				 */
+				int rled_length = (int) (msg[0] & 0x0000000ff)
+						+ (int) (msg[1] << 8 & 0x0000ff00);
+
+				System.out.println("rled_length : " + rled_length);
+
+				// Read pageIndex
+				int pageIndex = (int) (msg[2] & 0x0000000ff)
+						+ (int) (msg[3] << 8 & 0x0000ff00);
+
+				System.out.println("Page index : " + pageIndex);
+
+				// Decode RLE data
+				RleDecoder rled = new RleDecoder();
+
+				// Update frame data
+				int framePos = pageIndex * 4096;
+				if ((framePos - (msg.length - 2)) <= Frame.FRAME_LENGTH) {
+					Frame.frameBuffer.position(framePos);
+					Frame.frameBuffer.put(rled.decode(msg, 4, bytesRead - 4));
+					// Frame.frameBuffer.put(msg, 2, msg.length -
+					// 2);
+				}
+
+			}
+		});
 	}
 
 	// Sets up filestreams
