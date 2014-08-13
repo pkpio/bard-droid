@@ -143,7 +143,8 @@ public abstract class USBControl extends Thread {
 								&& (bytesRead = input.read(msg)) != -1
 								&& running) {
 							// receive(msg);
-							System.out.println("Read USB data");
+							System.out.println("Read USB data. Bytes read :"
+									+ bytesRead);
 
 							// Decode on a new thread to prevent io blocking
 							decode(msg, bytesRead);

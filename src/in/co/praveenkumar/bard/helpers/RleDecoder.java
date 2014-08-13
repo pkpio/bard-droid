@@ -40,8 +40,6 @@ public class RleDecoder {
 
 		while (pos < length) {
 
-			System.out.println("pos : " + pos + " length : " + length);
-
 			// Check for special chars for repeated data
 			if (rleData[pos] == 'r' && rleData[pos + 1] == 'r') {
 				// Get the repetition count from next byte of special chars
@@ -50,9 +48,7 @@ public class RleDecoder {
 
 				// Get pixel data from next two bytes
 				pos++;
-				System.out.println("count : " + count);
 				while (count != 0) {
-					out.write(rleData, pos, 2);
 					count--;
 					bytesRead = bytesRead + 2;
 				}
