@@ -1,7 +1,6 @@
 package in.co.praveenkumar.bard.io;
 
 import in.co.praveenkumar.bard.graphics.Frame;
-import in.co.praveenkumar.bard.graphics.FrameSettings;
 import in.co.praveenkumar.bard.helpers.RleDecoder;
 
 import java.io.FileDescriptor;
@@ -187,35 +186,35 @@ public abstract class USBControl extends Thread {
 	}
 
 	private void decode(final byte[] msg, final int bytesRead) {
-		new Thread() {
-			public void run() {
-				/*
-				 * Read RLE encoded page length. This is generally equal to the
-				 * number of bytes read. We need to handle decoding based on
-				 * this value when there is a mismatch from bytes received.
-				 */
-				int rled_length = (int) (msg[0] & 0x0000000ff)
-						+ (int) (msg[1] << 8 & 0x0000ff00);
+		// new Thread() {
+		// public void run() {
+		/*
+		 * Read RLE encoded page length. This is generally equal to the number
+		 * of bytes read. We need to handle decoding based on this value when
+		 * there is a mismatch from bytes received.
+		 */
+		int rled_length = (int) (msg[0] & 0x0000000ff)
+				+ (int) (msg[1] << 8 & 0x0000ff00);
 
-				// Read pageIndex
-				int pageIndex = (int) (msg[2] & 0x0000000ff)
-						+ (int) (msg[3] << 8 & 0x0000ff00);
+		// Read pageIndex
+		int pageIndex = (int) (msg[2] & 0x0000000ff)
+				+ (int) (msg[3] << 8 & 0x0000ff00);
 
-				System.out.println("Page index : " + pageIndex);
+		System.out.println("Page index : " + pageIndex);
 
-				// Decode RLE data
-				RleDecoder rled = new RleDecoder();
+		// Decode RLE data
+		RleDecoder rled = new RleDecoder();
 
-				byte[] test = rled.decode(msg, 4, bytesRead - 4);
-				// Update frame data
-				int framePos = pageIndex * 4096;
-				if ((framePos - (msg.length - 2)) <= Frame.FRAME_LENGTH) {
-					Frame.frameBuffer.position(framePos);
-					Frame.frameBuffer.put(test);
-				}
+		byte[] test = rled.decode(msg, 4, bytesRead - 4);
+		// Update frame data
+		int framePos = pageIndex * 4096;
+		if ((framePos - (msg.length - 2)) <= Frame.FRAME_LENGTH) {
+			Frame.frameBuffer.position(framePos);
+			Frame.frameBuffer.put(test);
+		}
 
-			}
-		}.start();
+		// }
+		// }.start();
 	}
 
 	// Sets up filestreams
