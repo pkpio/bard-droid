@@ -3,6 +3,8 @@ package in.co.praveenkumar.bard.activities;
 import in.co.praveenkumar.bard.R;
 import in.co.praveenkumar.bard.graphics.Frame;
 import in.co.praveenkumar.bard.graphics.FrameSettings;
+import in.co.praveenkumar.bard.helpers.RleDecodeQueue;
+import in.co.praveenkumar.bard.helpers.RleDecoder;
 import in.co.praveenkumar.bard.io.USBControl;
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -30,8 +32,9 @@ public class MainActivity extends Activity {
 
 		setupUSB();
 
-		// Start Frame updater thread
+		// Start Frame updater and decoder threads
 		frameUpdate();
+		new decodeLoop().start();
 
 	}
 
@@ -106,5 +109,38 @@ public class MainActivity extends Activity {
 			frameUpdate();
 		}
 	};
+
+	private class decodeLoop extends Thread {
+
+		@Override
+		public void run() {
+			while (true) {
+				if (RleDecodeQueue.pending() != 0) {
+					byte[] msg = RleDecodeQueue.getHead();
+					int rled_length = (int) (msg[0] & 0x0000000ff)
+							+ (int) (msg[1] << 8 & 0x0000ff00);
+
+					// Read pageIndex
+					int pageIndex = (int) (msg[2] & 0x0000000ff)
+							+ (int) (msg[3] << 8 & 0x0000ff00);
+
+					System.out.println("Page index : " + pageIndex);
+
+					// Decode RLE data
+					RleDecoder rled = new RleDecoder();
+
+					byte[] test = rled.decode(msg, 4, rled_length - 4);
+					// Update frame data
+					int framePos = pageIndex * 4096;
+					if ((framePos - (msg.length - 2)) <= Frame.FRAME_LENGTH) {
+						Frame.frameBuffer.position(framePos);
+						Frame.frameBuffer.put(test);
+					}
+				}
+
+			}
+		}
+
+	}
 
 }

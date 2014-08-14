@@ -1,6 +1,7 @@
 package in.co.praveenkumar.bard.io;
 
 import in.co.praveenkumar.bard.graphics.Frame;
+import in.co.praveenkumar.bard.helpers.RleDecodeQueue;
 import in.co.praveenkumar.bard.helpers.RleDecoder;
 
 import java.io.FileDescriptor;
@@ -145,9 +146,11 @@ public abstract class USBControl extends Thread {
 							System.out.println("Read USB data. Bytes read :"
 									+ bytesRead);
 
+							// Add to decode queue
+							RleDecodeQueue.add(msg);
 							// Decode on a new thread to prevent io blocking
-							decode(msg, bytesRead);
-
+							//decode(msg, bytesRead);
+							
 						}
 					} catch (final Exception e) {
 						UIHandler.post(new Runnable() {
