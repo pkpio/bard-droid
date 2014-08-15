@@ -8,33 +8,34 @@ public class RleDecodeQueue {
 
 	/**
 	 * Adds a byte[] to the rle decode queue
+	 * 
 	 * @param data
-	 * 		byte[] rle data.
+	 *            byte[] rle data.
 	 */
 	public static void add(byte[] data) {
 		queue.add(data);
-		pendingDecodes++;
+		System.out.println(queue.get(0));
+		//pendingDecodes++;
+		System.out.println("Pending decodes : " + queue.size());
 	}
 
 	/**
 	 * Get the byte[] at front of the queue and removes it.
 	 * 
-	 * @return
-	 * byte[] rle encoded data
+	 * @return byte[] rle encoded data
 	 */
 	public static byte[] getHead() {
-		byte[] data = queue.get(0);
-		queue.remove(0);
-		pendingDecodes--;
-		return data;
+		//pendingDecodes--;
+		System.out.println("Yo Pending decodes : " + queue.size());
+		return queue.remove(0);
 	}
 
 	/**
 	 * The number pending decodes.
-	 * @return
-	 * int pendingDecodes
+	 * 
+	 * @return int pendingDecodes
 	 */
 	public static int pending() {
-		return pendingDecodes;
+		return queue.size();
 	}
 }

@@ -142,15 +142,23 @@ public abstract class USBControl extends Thread {
 						while (input != null
 								&& (bytesRead = input.read(msg)) != -1
 								&& running) {
-							// receive(msg);
-							System.out.println("Read USB data. Bytes read :"
-									+ bytesRead);
+
+							int rled_length = (int) (msg[0] & 0x0000000ff)
+									+ (int) (msg[1] << 8 & 0x0000ff00);
+
+							// Read pageIndex
+							int pageIndex = (int) (msg[2] & 0x0000000ff)
+									+ (int) (msg[3] << 8 & 0x0000ff00);
+
+							System.out.println("Page index : " + pageIndex
+									+ " rled_len : " + rled_length
+									+ "Bytes read :" + bytesRead);
 
 							// Add to decode queue
 							RleDecodeQueue.add(msg);
 							// Decode on a new thread to prevent io blocking
-							//decode(msg, bytesRead);
-							
+							// decode(msg, bytesRead);
+
 						}
 					} catch (final Exception e) {
 						UIHandler.post(new Runnable() {

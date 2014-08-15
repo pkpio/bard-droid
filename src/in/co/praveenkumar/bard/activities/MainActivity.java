@@ -124,7 +124,7 @@ public class MainActivity extends Activity {
 					int pageIndex = (int) (msg[2] & 0x0000000ff)
 							+ (int) (msg[3] << 8 & 0x0000ff00);
 
-					System.out.println("Page index : " + pageIndex);
+					System.out.println("Decoded page index : " + pageIndex);
 
 					// Decode RLE data
 					RleDecoder rled = new RleDecoder();
