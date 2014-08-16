@@ -1,8 +1,6 @@
 package in.co.praveenkumar.bard.io;
 
 import in.co.praveenkumar.bard.graphics.Frame;
-import in.co.praveenkumar.bard.helpers.RleDecodeQueue;
-import in.co.praveenkumar.bard.helpers.RleDecoder;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -135,30 +133,25 @@ public abstract class USBControl extends Thread {
 
 			public void run() {
 				while (running) {
-					byte[] msg = new byte[4096];
-					int bytesRead = 0;
+					byte[] msg = new byte[4098];
 					try {
 						// Handle incoming messages
-						while (input != null
-								&& (bytesRead = input.read(msg)) != -1
+						while (input != null && input.read(msg) != -1
 								&& running) {
-
-							int rled_length = (int) (msg[0] & 0x0000000ff)
+							//receive(msg);
+							System.out.println("Read USB data");
+							int pageIndex = (int) (msg[0] & 0x0000000ff)
 									+ (int) (msg[1] << 8 & 0x0000ff00);
 
-							// Read pageIndex
-							int pageIndex = (int) (msg[2] & 0x0000000ff)
-									+ (int) (msg[3] << 8 & 0x0000ff00);
+							System.out.println("Page index : " + pageIndex);
 
-							System.out.println("Page index : " + pageIndex
-									+ " rled_len : " + rled_length
-									+ "Bytes read :" + bytesRead);
-
-							// Add to decode queue
-							RleDecodeQueue.add(msg);
-							// Decode on a new thread to prevent io blocking
-							// decode(msg, bytesRead);
-
+							// Update frame data
+							int framePos = pageIndex * 4096;
+							if ((framePos - (msg.length - 2)) <= Frame.FRAME_LENGTH) {
+								Frame.frameBuffer.position(framePos);
+								Frame.frameBuffer.put(msg, 2, msg.length - 2);
+							}
+							//Thread.sleep(10);
 						}
 					} catch (final Exception e) {
 						UIHandler.post(new Runnable() {
@@ -194,38 +187,6 @@ public abstract class USBControl extends Thread {
 			}
 		};
 		Looper.loop();
-	}
-
-	private void decode(final byte[] msg, final int bytesRead) {
-		// new Thread() {
-		// public void run() {
-		/*
-		 * Read RLE encoded page length. This is generally equal to the number
-		 * of bytes read. We need to handle decoding based on this value when
-		 * there is a mismatch from bytes received.
-		 */
-		int rled_length = (int) (msg[0] & 0x0000000ff)
-				+ (int) (msg[1] << 8 & 0x0000ff00);
-
-		// Read pageIndex
-		int pageIndex = (int) (msg[2] & 0x0000000ff)
-				+ (int) (msg[3] << 8 & 0x0000ff00);
-
-		System.out.println("Page index : " + pageIndex);
-
-		// Decode RLE data
-		RleDecoder rled = new RleDecoder();
-
-		byte[] test = rled.decode(msg, 4, bytesRead - 4);
-		// Update frame data
-		int framePos = pageIndex * 4096;
-		if ((framePos - (msg.length - 2)) <= Frame.FRAME_LENGTH) {
-			Frame.frameBuffer.position(framePos);
-			Frame.frameBuffer.put(test);
-		}
-
-		// }
-		// }.start();
 	}
 
 	// Sets up filestreams

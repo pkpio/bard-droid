@@ -11,14 +11,6 @@ public class RleDecoder {
 	byte[] outData;
 
 	/**
-	 * @param rleData
-	 *            RLE encoded in byte[].
-	 * @param offset
-	 *            Data offset in rleData from where RLE data starts
-	 * @param length
-	 *            Length of RLE data in rleData
-	 * @return decode plain data in byte[]
-	 * <br/>
 	 * <p>
 	 * Decodes RLE encoded data into plain form. Depending on the the length and
 	 * contents of the input data, this might take some time to evaluate.
@@ -30,13 +22,20 @@ public class RleDecoder {
 	 * details about the encoding scheme can be found at,
 	 * https://github.com/praveendath92/udlfb
 	 * </p>
+	 * <br/>
 	 * 
+	 * @param rleData
+	 *            RLE encoded in byte[].
+	 * @param offset
+	 * 			  Data offset in rleData from where RLE data starts
+	 * @param length
+	 * 			  Length of RLE data in rleData 
+	 * @return decode plain data in byte[]
 	 */
 	public byte[] decode(byte[] rleData, int offset, int length) {
 		int pos = offset;
 		int count = 0;
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		int bytesRead = 0;
 
 		while (pos < length) {
 
@@ -44,29 +43,26 @@ public class RleDecoder {
 			if (rleData[pos] == 'r' && rleData[pos + 1] == 'r') {
 				// Get the repetition count from next byte of special chars
 				pos = pos + 2;
-				count = rleData[pos] & 0x000000ff;
+				count = rleData[pos]&0x000000ff;
 
 				// Get pixel data from next two bytes
 				pos++;
-				while (count != 0) {
-					count--;
+				while (count != 0){
 					out.write(rleData, pos, 2);
-					bytesRead = bytesRead + 2;
+					count--;
 				}
 
 			}
 
 			// No repetition, just write out the input data.
-			else {
+			else
 				out.write(rleData, pos, 2);
-				bytesRead = bytesRead + 2;
-			}
 
 			pos = pos + 2;
 		}
 
-		System.out.println("Bytes decoded : " + bytesRead);
 		outData = out.toByteArray();
 		return outData;
 	}
+
 }
