@@ -20,7 +20,7 @@ public class FrameSettings {
 	/**
 	 * Frames per second.
 	 */
-	public static final int FPS = 20;
+	public static final int FPS = 15;
 
 	/**
 	 * Bytes per compression. 
