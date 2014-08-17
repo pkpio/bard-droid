@@ -19,7 +19,6 @@ public class MainActivity extends Activity {
 
 	// Handler, Threads
 	private Handler UIHandler = new Handler();
-	private USBControlServer usbConnection;
 
 	// Activity Lifecycle
 	@Override
@@ -59,7 +58,7 @@ public class MainActivity extends Activity {
 	private void setupUSB() {
 
 		System.out.println("Starting USB...");
-		usbConnection = new USBControlServer(UIHandler);
+		new USBControlServer(UIHandler);
 		System.out.println("Done\n");
 	}
 
