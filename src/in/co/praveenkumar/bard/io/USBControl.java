@@ -106,17 +106,6 @@ public abstract class USBControl extends Thread {
 		}
 	}
 
-	// Receive byte array over connection
-	private void receive(final byte[] msg) {
-
-		// pass to ui thread for processing
-		UIHandler.post(new Runnable() {
-			public void run() {
-				onReceive(msg);
-			}
-		});
-	}
-
 	public abstract void onReceive(byte[] msg);
 
 	public abstract void onNotify(String msg);
@@ -138,7 +127,7 @@ public abstract class USBControl extends Thread {
 						// Handle incoming messages
 						while (input != null && input.read(msg) != -1
 								&& running) {
-							//receive(msg);
+							// receive(msg);
 							System.out.println("Read USB data");
 							int pageIndex = (int) (msg[0] & 0x0000000ff)
 									+ (int) (msg[1] << 8 & 0x0000ff00);
@@ -151,7 +140,6 @@ public abstract class USBControl extends Thread {
 								Frame.frameBuffer.position(framePos);
 								Frame.frameBuffer.put(msg, 2, msg.length - 2);
 							}
-							//Thread.sleep(10);
 						}
 					} catch (final Exception e) {
 						UIHandler.post(new Runnable() {
