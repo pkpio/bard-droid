@@ -4,7 +4,6 @@ import in.co.praveenkumar.bard.graphics.Frame;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import android.app.PendingIntent;
@@ -15,7 +14,6 @@ import android.content.IntentFilter;
 import android.hardware.usb.UsbAccessory;
 import android.hardware.usb.UsbManager;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
 
@@ -41,7 +39,6 @@ public abstract class USBControl extends Thread {
 	boolean connected = false;
 	private ParcelFileDescriptor mFileDescriptor;
 	private FileInputStream input;
-	private FileOutputStream output;
 
 	// Receiver for connect/disconnect events
 	BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
@@ -157,24 +154,6 @@ public abstract class USBControl extends Thread {
 		controlListener.setDaemon(true);
 		controlListener.setName("USBCommandListener");
 		controlListener.start();
-
-		// Sends messages to usb accessory
-		Looper.prepare();
-		controlSender = new Handler() {
-			public void handleMessage(Message msg) {
-				try {
-					output.write((byte[]) msg.obj);
-				} catch (final Exception e) {
-					UIHandler.post(new Runnable() {
-						public void run() {
-							onNotify("USB Send Failed " + e.toString() + "\n");
-						}
-					});
-					controlSender.getLooper().quit();
-				}
-			}
-		};
-		Looper.loop();
 	}
 
 	// Sets up filestreams
@@ -184,7 +163,6 @@ public abstract class USBControl extends Thread {
 		if (mFileDescriptor != null) {
 			FileDescriptor fd = mFileDescriptor.getFileDescriptor();
 			input = new FileInputStream(fd);
-			output = new FileOutputStream(fd);
 		}
 		this.start();
 		onConnected();
