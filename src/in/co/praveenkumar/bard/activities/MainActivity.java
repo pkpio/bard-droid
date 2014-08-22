@@ -16,6 +16,7 @@ public class MainActivity extends Activity {
 	final String USB_PERMISSION = "in.co.praveenkumar.bard.activities.MainActivity.USBPERMISSION";
 
 	ImageView remoteScreen;
+	Bitmap bitmap = Bitmap.createBitmap(1024, 768, Bitmap.Config.RGB_565);
 
 	// Handler, Threads
 	private Handler UIHandler = new Handler();
@@ -36,8 +37,6 @@ public class MainActivity extends Activity {
 
 	public void updateImage() {
 		System.out.println("setUpImage called");
-		Bitmap bitmap;
-		bitmap = Bitmap.createBitmap(1024, 768, Bitmap.Config.RGB_565);
 
 		/*
 		 * -TODO- - Some strange thing here. Sometimes copyPixelsFromBuffer is

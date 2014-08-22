@@ -6,8 +6,6 @@ public class Frame {
 	public static final int FRAME_LENGTH = FrameSettings.WIDTH
 			* FrameSettings.HEIGHT * FrameSettings.BPP;
 
-	// public static final int ALT_FRAME_LENGTH = WIDTH * 320 * BPP;
-
 	// Temp variables
 	public static int bytesReceived = 0;
 	public static int frameCount = 0;
