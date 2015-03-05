@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resource>
+
+    <usb-accessory manufacturer="BeagleBone" />
+
+</resource>
+<!-- From: file:/E:/Android%20Studio%20Workspace/bard-droid2/app/src/main/res/xml/accessory_filter.xml -->
