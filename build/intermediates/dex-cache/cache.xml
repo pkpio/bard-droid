@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="E:\Android Studio Workspace\bard-droid2\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="E:\Android Studio Workspace\bard-droid2\app\build\intermediates\pre-dexed\debug\classes-37ce5727af45ac6b910b6a1d83574a36bdd6f5dc.jar" />
+    </item>
+    <item
+        jar="C:\Users\matei\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="E:\Android Studio Workspace\bard-droid2\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-64f4b10e08404a06f6c8349ec350db9369db45cb.jar" />
+    </item>
+    <item
+        jar="E:\Android Studio Workspace\bard-droid2\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="E:\Android Studio Workspace\bard-droid2\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-e1057822463fd2acc97b5e12f26a4fef764fd554.jar" />
+    </item>
+
+</items>

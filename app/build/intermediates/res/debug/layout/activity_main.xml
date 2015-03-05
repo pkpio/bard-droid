@@ -1,0 +1,16 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="${packageName}.${activityClass}" >
+    
+    <!-- Frame Display area -->
+
+    <ImageView
+        android:id="@+id/remote_screen"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:contentDescription="@string/app_name" />
+
+</LinearLayout><!-- From: file:/E:/Android%20Studio%20Workspace/bard-droid2/app/src/main/res/layout/activity_main.xml -->
